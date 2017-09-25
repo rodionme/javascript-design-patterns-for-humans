@@ -1,1877 +1,2103 @@
 ![Design Patterns For Humans](./cover.png)
 
-***
-<p align="center">
-🎉 Ultra-simplified explanation to design patterns! 🎉
-</p>
-<p align="center">
-A topic that can easily make anyone's mind wobble. Here I try to make them stick in to your mind (and maybe mine) by explaining them in the <i>simplest</i> way possible. 
-<br/>
-Based on <a href="https://github.com/kamranahmedse/design-patterns-for-humans">"Design patterns for humans"</a>
-</p>
-
-***
-
-Follow me on [twitter](https://twitter.com/sohamkamani) and check out my [blog](http://sohamkamani.com)
-
-🚀 Introduction
+🚀 Введение
 =================
 
-Design patterns are solutions to recurring problems **guidelines on how to tackle certain problems**. They are not classes, packages or libraries that you can plug into your application and wait for the magic to happen. These are, rather, guidelines on how to tackle certain problems in certain situations. 
+Шаблоны проектирования — это **способ решения периодически возникающих проблем**. Точнее, это руководства по решению 
+конкретных проблем. Это не классы, пакеты или библиотеки, которые вы можете вставить в своё приложение и ожидать 
+волшебства.
 
-> Design patterns solutions to recurring problems guidelines on how to tackle certain problems
+Как сказано в Википедии:
 
-Wikipedia describes them as
+> В программной инженерии шаблон проектирования приложений — это многократно применяемое решение регулярно возникающей 
+проблемы в рамках определённого контекста архитектуры приложения. Шаблон — это не законченное архитектурное решение, 
+которое можно напрямую преобразовать в исходный или машинный код. Это описание подхода к решению проблемы, который можно 
+применять в разных ситуациях.
 
-> In software engineering, a software design pattern is a general reusable solution to a commonly occurring problem within a given context in software design. It is not a finished design that can be transformed directly into source or machine code. It is a description or template for how to solve a problem that can be used in many different situations.
-
-⚠️ Be Careful
+⚠️ Будьте осторожны
 -----------------
-- Design patterns are not a silver bullet to all your problems.
-- Do not try to force them bad things are supposed to happen, if done so. Keep in mind that design patterns are solutions **to** problems, not solutions **finding** problems so don't overthink.
-- If used in a correct place in a correct manner, they can prove to be a savior or else they can result in a horrible mess of a code.
+- Шаблоны проектирования — не «серебряная пуля».
+- Не пытайтесь внедрять их принудительно, последствия могут быть негативными. Помните, что шаблоны — это способы 
+**решения**, а не **поиска** проблем. Так что не перемудрите.
+- Если применять их правильно и в нужных местах, они могут оказаться спасением. В противном случае у вас будет ещё больше 
+проблем.
 
 
+## 🐢 Прежде, чем вы начнете
 
+- Все шаблоны проектирования описаны в [ES6](https://github.com/lukehoban/es6features) — новой версии Javascript и 
+[TypeScript](https://www.typescriptlang.org).
 
-## 🐢 Before you start
-
-- All design patterns have been implemented in [ES6](https://github.com/lukehoban/es6features), the new version of javascript.
-- Since javascript does not have any implementation of interfaces, the examples here use implied interfaces, which means that as long as a class has attributes and methods that a particular interface is supposed to have, it is considered to implement that interface. To make it easier to tell the interface we are using, its information can be found in the comments of every example.
-
-Types of Design Patterns
+Виды шаблонов проектирования
 -----------------
 
-* [Creational](#creational-design-patterns)
-* [Structural](#structural-design-patterns)
-* [Behavioral](#behavioral-design-patterns)
+* [Порождающие (Creational)](#creational-design-patterns)
+* [Структурные (Structural)](#structural-design-patterns)
+* [Поведенческие (Behavioral)](#behavioral-design-patterns)
 
 
-Creational Design Patterns
+Порождающие (Creational) шаблоны проектирования
 ==========================
 
-In plain words
-> Creational patterns are focused towards how to instantiate an object or group of related objects.
+Вкратце
+> Порождающие шаблоны описывают создание (instantiate) объекта или группы связанных объектов.
 
-Wikipedia says
-> In software engineering, creational design patterns are design patterns that deal with object creation mechanisms, trying to create objects in a manner suitable to the situation. The basic form of object creation could result in design problems or added complexity to the design. Creational design patterns solve this problem by somehow controlling this object creation.
+Википедия
+> В программной инженерии порождающими называют шаблоны, которые используют механизмы создания объектов, чтобы создавать 
+объекты подходящим для данной ситуации способом. Базовый способ создания может привести к проблемам в архитектуре или к 
+её усложнению. Порождающие шаблоны пытаются решать эти проблемы, управляя способом создания объектов.
  
- * [Simple Factory](#-simple-factory)
- * [Factory Method](#-factory-method)
- * [Abstract Factory](#-abstract-factory)
- * [Builder](#-builder)
- * [Prototype](#-prototype)
- * [Singleton](#-singleton)
+ * [Простая фабрика (Simple Factory)](#-simple-factory)
+ * [Фабричный метод (Factory Method)](#-factory-method)
+ * [Абстрактная фабрика (Abstract Factory)](#-abstract-factory)
+ * [Строитель (Builder)](#-builder)
+ * [Одиночка (Singleton)](#-singleton)
  
-🏠 Simple Factory
+🏠 Простая фабрика (Simple Factory)
 --------------
-Real world example
-> Consider, you are building a house and you need doors. It would be a mess if every time you need a door, you put on your carpenter clothes and start making a door in your house. Instead you get it made from a factory.
+Аналогия
+> Допустим, вы строите дом и вам нужны двери. Будет бардак, если каждый раз, когда вам требуется дверь, вы станете 
+вооружаться инструментами и делать её на стройплощадке. Вместо этого вы закажете двери на фабрике.
 
-In plain words
-> Simple factory simply generates an instance for client without exposing any instantiation logic to the client
+Вкратце
+> Простая фабрика просто генерирует экземпляр для клиента без предоставления какой-либо логики экземпляра.
 
-Wikipedia says
-> In object-oriented programming (OOP), a factory is an object for creating other objects – formally a factory is a function or method that returns objects of a varying prototype or class from some method call, which is assumed to be "new".
+Википедия
+> В объектно ориентированном программировании фабрикой называется объект, создающий другие объекты. Формально фабрика — 
+это функция или метод, возвращающая объекты разных прототипов или классов из вызова какого-то метода, который считается 
+новым.
 
-**Programmatic Example**
+**Пример**
 
-First of all we have a door interface and the implementation
-```js
-/*
-Door
+Для начала нам нужен интерфейс двери и его реализация.
 
-getWidth()
-getHeight()
+```ts
+interface Door {
+  getWidth(): number;
 
-*/
+  getHeight(): number;
+}
 
-class WoodenDoor {
-  constructor(width, height){
-    this.width = width
-    this.height = height
+class WoodenDoor implements Door {
+  width: number;
+  height: number;
+
+  constructor(width: number, height: number) {
+    this.width = width;
+    this.height = height;
   }
 
-  getWidth(){
-    return this.width
+  getWidth(): number {
+    return this.width;
   }
 
-  getHeight(){
-    return this.height
+  getHeight(): number {
+    return this.height;
   }
 }
 ```
-Then we have our door factory that makes the door and returns it
 
-```js
+Теперь соорудим фабрику дверей, которая создаёт и возвращает нам двери.
+
+```ts
 const DoorFactory = {
-  makeDoor : (width, height) => new WoodenDoor(width, height)
-}
-```
-And then it can be used as
-
-```js
-const door = DoorFactory.makeDoor(100, 200)
-console.log('Width:', door.getWidth())
-console.log('Height:', door.getHeight())
+  makeDoor: (width: number, height: number) => new WoodenDoor(width, height)
+};
 ```
 
-**When to Use?**
+Использование:
 
-When creating an object is not just a few assignments and involves some logic, it makes sense to put it in a dedicated factory instead of repeating the same code everywhere. 
+```ts
+const door = DoorFactory.makeDoor(100, 200);
 
-🏭 Factory Method
+console.log('Width:', door.getWidth());   // => Width: 100
+console.log('Height:', door.getHeight());   // => Height: 200
+```
+
+**Когда использовать?**
+
+Когда создание объекта подразумевает какую-то логику, а не просто несколько присваиваний, то имеет смысл делегировать 
+задачу выделенной фабрике, а не повторять повсюду один и тот же код.
+
+🏭 Фабричный метод (Factory Method)
 --------------
 
-Real world example
-> Consider the case of a hiring manager. It is impossible for one person to interview for each of the positions. Based on the job opening, she has to decide and delegate the interview steps to different people. 
+Аналогия
+> Одна кадровичка не в силах провести собеседования со всеми кандидатами на все должности. В зависимости от вакансии она 
+может делегировать разные этапы собеседований разным сотрудникам. 
 
-In plain words
-> It provides a way to delegate the instantiation logic to child classes. 
+Вкратце
+> Это способ делегирования логики создания объектов (instantiation logic) дочерним классам.
 
-Wikipedia says
-> In class-based programming, the factory method pattern is a creational pattern that uses factory methods to deal with the problem of creating objects without having to specify the exact class of the object that will be created. This is done by creating objects by calling a factory method—either specified in an interface and implemented by child classes, or implemented in a base class and optionally overridden by derived classes—rather than by calling a constructor.
+Википедия
+> В классо-ориентированном программировании (class-based programming) фабричным методом называют порождающий шаблон 
+проектирования, использующий генерирующие методы (factory method) для решения проблемы создания объектов без указания 
+для них конкретных классов. Объекты создаются посредством вызова не конструктора, а генерирующего метода, определённого 
+в интерфейсе и реализованного дочерними классами либо реализованного в базовом классе и, опционально, переопределённого 
+(overridden) производными классами (derived classes).
  
- **Programmatic Example**
+ **Пример**
  
-Taking our hiring manager example above. First of all we have an interviewer interface and some implementations for it
+Сначала создадим интерфейс сотрудника, проводящего собеседование, и некоторые реализации для него.
 
-```js
-/*
-Interviewer interface
+```ts
+interface Interviewer {
+  askQuestions(): void;
+}
 
-askQuestions()
-*/
-
-class Developer {
-  askQuestions() {
-    console.log('Asking about design patterns!')
+class Developer implements Interviewer {
+  askQuestions(): void {
+    console.log('Спрашивает о шаблонах проектирования.');
   }
 }
 
-class CommunityExecutive {
-  askQuestions() {
-    console.log('Asking about community building')
+class CommunityExecutive implements Interviewer {
+  askQuestions(): void {
+    console.log('Спрашивает о создании сообщества.');
   }
 }
 ```
 
-Now let us create our `HiringManager`
+Теперь создадим кадровичку `HiringManager`
 
-```js
-class HiringManager {
-        
-    takeInterview() {
-        const interviewer = this.makeInterviewer()
-        interviewer.askQuestions()
-    }
+```ts
+abstract class HiringManager {
+  abstract makeInterviewer(): Interviewer;
+
+  takeInterview(): void {
+    const interviewer = this.makeInterviewer();
+
+    interviewer.askQuestions();
+  }
 }
 ```
-Now any child can extend it and provide the required interviewer
-```js
+
+Любой дочерний класс может расширять его и предоставлять нужного собеседующего:
+
+```ts
 class DevelopmentManager extends HiringManager {
-    makeInterviewer() {
-        return new Developer()
-    }
+  makeInterviewer(): Developer {
+    return new Developer();
+  }
 }
 
 class MarketingManager extends HiringManager {
-    makeInterviewer() {
-        return new CommunityExecutive()
-    }
+  makeInterviewer(): CommunityExecutive {
+    return new CommunityExecutive();
+  }
 }
 ```
-and then it can be used as
 
-```js
-const devManager = new DevelopmentManager()
-devManager.takeInterview() // Output: Asking about design patterns
+Использование:
 
-const marketingManager = new MarketingManager()
-marketingManager.takeInterview() // Output: Asking about community buildng.
+```ts
+const devManager = new DevelopmentManager();
+
+devManager.takeInterview(); // => Спрашивает о шаблонах проектирования.
+
+
+const marketingManager = new MarketingManager();
+
+marketingManager.takeInterview(); // => Спрашивает о создании сообщества.
 ```
 
-**When to use?**
+**Когда использовать?**
 
-Useful when there is some generic processing in a class but the required sub-class is dynamically decided at runtime. Or putting it in other words, when the client doesn't know what exact sub-class it might need.
+Этот шаблон полезен для каких-то общих обработок в классе, но требуемые подклассы динамически определяются в ходе 
+выполнения (runtime). То есть когда клиент не знает, какой именно подкласс может ему понадобиться.
 
-🔨 Abstract Factory
+🔨 Абстрактная фабрика (Abstract Factory)
 ----------------
 
-Real world example
-> Extending our door example from Simple Factory. Based on your needs you might get a wooden door from a wooden door shop, iron door from an iron shop or a PVC door from the relevant shop. Plus you might need a guy with different kind of specialities to fit the door, for example a carpenter for wooden door, welder for iron door etc. As you can see there is a dependency between the doors now, wooden door needs carpenter, iron door needs a welder etc.
+Аналогия
+> Вернёмся к примеру с дверями из «Простой фабрики». В зависимости от своих потребностей вы можете купить деревянную 
+дверь в одном магазине, стальную — в другом, пластиковую — в третьем. Для монтажа вам понадобятся разные специалисты: 
+деревянной двери нужен плотник, стальной — сварщик, пластиковой — спец по ПВХ-профилям.
 
-In plain words
-> A factory of factories a factory that groups the individual but related/dependent factories together without specifying their concrete classes. 
+Вкратце
+> Это фабрика фабрик. То есть фабрика, группирующая индивидуальные, но взаимосвязанные/взаимозависимые фабрики без 
+указания для них конкретных классов. 
   
-Wikipedia says
-> The abstract factory pattern provides a way to encapsulate a group of individual factories that have a common theme without specifying their concrete classes
+Википедия
+> Шаблон «Абстрактная фабрика» описывает способ инкапсулирования группы индивидуальных фабрик, объединённых некой темой, 
+без указания для них конкретных классов.
 
-**Programmatic Example**
+**Пример**
 
-Translating the door example above. First of all we have our `Door` interface and some implementation for it
+Создадим интерфейс `Door` и несколько реализаций для него.
 
-```js
-/*
-Door interface :
-
-getDescription()
-*/
-
-class WoodenDoor {
-    getDescription() {
-        console.log('I am a wooden door')
-    }
+```ts
+interface Door {
+  getDescription(): void;
 }
 
-class IronDoor {
-    getDescription() {
-        console.log('I am an iron door')
-    }
-}
-```
-Then we have some fitting experts for each door type
-
-```js
-/*
-DoorFittingExpert interface :
-
-getDescription()
-*/
-
-class Welder {
-    getDescription() {
-        console.log('I can only fit iron doors')
-    }
+class WoodenDoor implements Door {
+  getDescription(): void {
+    console.log('Я деревянная дверь');
+  }
 }
 
-class Carpenter {
-    getDescription() {
-        console.log('I can only fit wooden doors')
-    }
+class IronDoor implements Door {
+  getDescription(): void {
+    console.log('Я железная дверь');
+  }
 }
 ```
 
-Now we have our abstract factory that would let us make family of related objects i.e. wooden door factory would create a wooden door and wooden door fitting expert and iron door factory would create an iron door and iron door fitting expert
-```js
-/*
-DoorFactory interface :
+Теперь нам нужны специалисты по установке каждого вида дверей.
 
-makeDoor()
-makeFittingExpert()
-*/
-
-// Wooden factory to return carpenter and wooden door
-class WoodenDoorFactory {
-    makeDoor(){
-        return new WoodenDoor()
-    }
-
-    makeFittingExpert() {
-        return new Carpenter()
-    }
+```ts
+interface DoorFittingExpert {
+  getDescription(): void;
 }
 
-// Iron door factory to get iron door and the relevant fitting expert
-class IronDoorFactory {
-    makeDoor(){
-        return new IronDoor()
-    }
+class Welder implements DoorFittingExpert {
+  getDescription(): void {
+    console.log('Я могу работать только с деревянными дверьми');
+  }
+}
 
-    makeFittingExpert() {
-        return new Welder()
-    }
+class Carpenter implements DoorFittingExpert {
+  getDescription(): void {
+    console.log('Я могу работать только с железными дверьми');
+  }
 }
 ```
-And then it can be used as
-```js
-woodenFactory = new WoodenDoorFactory()
 
-door = woodenFactory.makeDoor()
-expert = woodenFactory.makeFittingExpert()
+Мы получили абстрактную фабрику, которая позволяет создавать семейства объектов или взаимосвязанные объекты. То есть 
+фабрика деревянных дверей создаст деревянную дверь и человека для её монтажа, фабрика стальных дверей — стальную дверь 
+и соответствующего специалиста и т. д.
 
-door.getDescription()  // Output: I am a wooden door
-expert.getDescription() // Output: I can only fit wooden doors
+```ts
+interface DoorFactory {
+  makeDoor(): Door;
+  makeFittingExpert(): DoorFittingExpert;
+}
 
-// Same for Iron Factory
-ironFactory = new IronDoorFactory()
+// Фабрика деревянных дверей возвращает деревянную дверь и плотника
+class WoodenDoorFactory implements DoorFactory {
+  makeDoor(): Door {
+    return new WoodenDoor();
+  }
 
-door = ironFactory.makeDoor()
-expert = ironFactory.makeFittingExpert()
+  makeFittingExpert(): DoorFittingExpert {
+    return new Carpenter();
+  }
+}
 
-door.getDescription()  // Output: I am an iron door
-expert.getDescription() // Output: I can only fit iron doors
+// Фабрика железных дверей возвращает железную дверь и сварщика
+class IronDoorFactory implements DoorFactory {
+  makeDoor(): Door {
+    return new IronDoor();
+  }
+
+  makeFittingExpert(): DoorFittingExpert {
+    return new Welder();
+  }
+}
 ```
 
-As you can see the wooden door factory has encapsulated the `carpenter` and the `wooden door` also iron door factory has encapsulated the `iron door` and `welder`. And thus it had helped us make sure that for each of the created door, we do not get a wrong fitting expert.   
+Использование:
 
-**When to use?**
+```ts
+let woodenFactory = new WoodenDoorFactory();
 
-When there are interrelated dependencies with not-that-simple creation logic involved
+let door = woodenFactory.makeDoor();
+let expert = woodenFactory.makeFittingExpert();
 
-👷 Builder
+door.getDescription();    // => Я деревянная дверь
+expert.getDescription();    // => Я могу работать только с деревянными дверьми
+
+// Тоже самое для фабрики железных дверей
+let ironFactory = new IronDoorFactory();
+
+door = ironFactory.makeDoor();
+expert = ironFactory.makeFittingExpert();
+
+door.getDescription();    // => Я железная дверь
+expert.getDescription();    // => Я могу работать только с железными дверьми
+```
+
+Здесь фабрика деревянных дверей инкапсулировала `carpenter` и `wooden door`, фабрика стальных дверей — `iron door` и 
+`welder`. То есть можно быть уверенными, что для каждой из созданных дверей мы получим правильного специалиста.  
+
+**Когда использовать?**
+
+Когда у вас есть взаимосвязи с не самой простой логикой создания.
+
+👷 Строитель (Builder)
 --------------------------------------------
-Real world example
-> Imagine you are at Hardee's and you order a specific deal, lets say, "Big Hardee" and they hand it over to you without *any questions* this is the example of simple factory. But there are cases when the creation logic might involve more steps. For example you want a customized Subway deal, you have several options in how your burger is made e.g what bread do you want? what types of sauces would you like? What cheese would you want? etc. In such cases builder pattern comes to the rescue.
+Аналогия
+> Допустим, вы пришли в забегаловку, заказали бургер дня, и вам выдали его *без вопросов*. Это пример «Простой фабрики». 
+Но иногда логика создания состоит из большего количества шагов. К примеру, при заказе бургера дня есть несколько 
+вариантов хлеба, начинки, соусов, дополнительных ингредиентов. В таких ситуациях помогает шаблон «Строитель».
 
-In plain words
-> Allows you to create different flavors of an object while avoiding constructor pollution. Useful when there could be several flavors of an object. Or when there are a lot of steps involved in creation of an object.
+Вкратце
+> Шаблон позволяет создавать разные свойства объекта, избегая загрязнения конструктора (constructor pollution). Это 
+полезно, когда у объекта может быть несколько свойств. Или когда создание объекта состоит из большого количества этапов.
  
-Wikipedia says
-> The builder pattern is an object creation software design pattern with the intentions of finding a solution to the telescoping constructor anti-pattern.
+Википедия
+> Шаблон «Строитель» предназначен для поиска решения проблемы антипаттерна Telescoping constructor.
 
-Having said that let me add a bit about what telescoping constructor anti-pattern is. At one point or the other we have all seen a constructor like below:
+Что такое антипаттерн Telescoping constructor? Каждый из нас когда-либо сталкивался с подобным конструктором:
  
-```js
+```ts
 constructor(size, cheese = true, pepperoni = true, tomato = false, lettuce = true) {
     // ... 
 }
 ```
 
-As you can see the number of constructor parameters can quickly get out of hand and it might become difficult to understand the arrangement of parameters. Plus this parameter list could keep on growing if you would want to add more options in future. This is called telescoping constructor anti-pattern.
+Как видите, количество параметров может быстро разрастись, и станет трудно разобраться в их структуре. Кроме того, этот 
+список параметров будет расти и дальше, если в будущем вы захотите добавить новые опции. Это и есть антипаттерн 
+Telescoping constructor.
 
-**Programmatic Example**
+**Пример**
 
-The sane alternative is to use the builder pattern. First of all we have our burger that we want to make
+Разумная альтернатива — шаблон «Строитель». Сначала создадим бургер:
 
-```js
+```ts
 class Burger {
-    constructor(builder) {
-        this.size = builder.size
-        this.cheeze = builder.cheeze || false
-        this.pepperoni = builder.pepperoni || false
-        this.lettuce = builder.lettuce || false
-        this.tomato = builder.tomato || false
-    }
+  size: number;
+  cheeze: boolean;
+  pepperoni: boolean;
+  lettuce: boolean;
+  tomato: boolean;
+
+  constructor(builder) {
+    this.size = builder.size;
+    this.cheeze = builder.cheeze || false;
+    this.pepperoni = builder.pepperoni || false;
+    this.lettuce = builder.lettuce || false;
+    this.tomato = builder.tomato || false;
+  }
 }
 ```
 
-And then we have the builder
+А затем добавим «строителя»:
 
-```js
+```ts
 class BurgerBuilder {
+  size: number;
+  cheeze: boolean;
+  pepperoni: boolean;
+  lettuce: boolean;
+  tomato: boolean;
 
-    constructor(size) {
-        this.size = size
-    }
+  constructor(size) {
+    this.size = size;
+  }
 
-    addPepperoni() {
-        this.pepperoni = true
-        return this
-    }
+  addPepperoni(): BurgerBuilder {
+    this.pepperoni = true;
 
-    addLettuce() {
-        this.lettuce = true
-        return this
-    }
+    return this;
+  }
 
-    addCheeze() {
-        this.cheeze = true
-        return this
-    }
+  addLettuce(): BurgerBuilder {
+    this.lettuce = true;
 
-    addTomato() {
-        this.tomato = true
-        return this
-    }
+    return this;
+  }
 
-    build() {
-        return new Burger(this)
-    }
+  addCheeze(): BurgerBuilder {
+    this.cheeze = true;
+
+    return this;
+  }
+
+  addTomato(): BurgerBuilder {
+    this.tomato = true;
+
+    return this;
+  }
+
+  build(): Burger {
+    return new Burger(this);
+  }
 }
 ```
-And then it can be used as:
 
-```js
+Использование:
+
+```ts
 const burger = (new BurgerBuilder(14))
-    .addPepperoni()
-    .addLettuce()
-    .addTomato()
-    .build()
+  .addPepperoni()
+  .addLettuce()
+  .addTomato()
+  .build();
 ```
 
-__Javascript specific tip__ : When you find that the number of arguments to a function or method are too many (normally any more than 2 arguments is considered too much), use a single object argument instead of multiple arguments. This serves two purposes :
+__Javascript-специфичный совет__ : Когда вы обнаружите, что количество аргументов функции или метода слишком велико 
+(обычно
+более двух аргументов считается слишком большим), используйте один аргумент объекта вместо нескольких аргументов. Это 
+позволяет достичь 2 цели:
 
-1. It makes your code look less cluttered, since there is only one argument.
-2. You don't have to worry about the order of arguments since arguments are now passed as named properties of the object.
+1. Это делает ваш код менее громоздким, поскольку есть только один аргумент.
+2. Вам не нужно беспокоиться о порядке аргументов, поскольку аргументы теперь передаются как именованные свойства 
+объекта.
 
-For example : 
+Например:
 
-```js
+```ts
 const burger = new Burger({
-    size : 14,
-    pepperoni : true,
-    cheeze : false,
-    lettuce : true,
-    tomato : true
-})
+    size: 14,
+    pepperoni: true,
+    cheeze: false,
+    lettuce: true,
+    tomato: true
+});
 ```
 
-instead of :
+вместо
 
+```ts
+const burger = new Burger(14, true, false, true, true);
 ```
-const burger = new Burger(14, true, false, true, true)
-```
 
-**When to use?**
+**Когда использовать?**
 
-When there could be several flavors of an object and to avoid the constructor telescoping. The key difference from the factory pattern is that factory pattern is to be used when the creation is a one step process while builder pattern is to be used when the creation is a multi step process.
+Когда у объекта может быть несколько свойств и когда нужно избежать Telescoping constructor. Ключевое отличие от шаблона 
+«Простая фабрика»: он используется в одноэтапном создании, а «Строитель» — в многоэтапном.
 
 
-💍 Singleton
+💍 Одиночка (Singleton)
 ------------
-Real world example
-> There can only be one president of a country at a time. The same president has to be brought to action, whenever duty calls. President here is singleton.
+Аналогия
+> У страны может быть только один президент. Он должен действовать, когда того требуют обстоятельства и долг. В данном 
+случае президент — одиночка.
 
-In plain words
-> Ensures that only one object of a particular class is ever created.
+Вкратце
+> Шаблон позволяет удостовериться, что создаваемый объект — единственный в своём классе.
 
-Wikipedia says
-> In software engineering, the singleton pattern is a software design pattern that restricts the instantiation of a class to one object. This is useful when exactly one object is needed to coordinate actions across the system.
+Википедия
+> Шаблон «Одиночка» позволяет ограничивать создание класса единственным объектом. Это удобно, когда для координации 
+действий в рамках системы требуется, чтобы объект был единственным в своём классе.
 
-Singleton pattern is actually considered an anti-pattern and overuse of it should be avoided. It is not necessarily bad and could have some valid use-cases but should be used with caution because it introduces a global state in your application and change to it in one place could affect in the other areas and it could become pretty difficult to debug. The other bad thing about them is it makes your code tightly coupled plus it mocking the singleton could be difficult.
+На самом деле шаблон «Одиночка» считается антипаттерном, не следует им слишком увлекаться. Он необязательно плох и 
+иногда бывает полезен. Но применяйте его с осторожностью, потому что «Одиночка» вносит в приложение глобальное состояние, 
+так что изменение в одном месте может повлиять на все остальные случаи использования, а отлаживать такое — не самое 
+простое занятие. Другие недостатки шаблона: он делает ваш код сильно связанным (tightly coupled), а создание прототипа 
+(mocking) «Одиночки» может быть затруднено.
 
-**Programmatic Example**
+**Пример**
 
-In javascript, singletons can be implemented using the module pattern. Private variables and functions are hidden in a function closure, and public methods are selectively exposed.
-```js
-const president = (function(){
-    const presidentsPrivateInformation = 'Super private'
+В Javascript одиночки могут быть реализованы с использованием шаблона «Модуль». Частные переменные и функции скрыты в
+замыкании функции, а публичные методы могут быть доступны выборочно.
 
-    const name = 'Turd Sandwich'
+```ts
+const president = (function () {
+  const _presidentsPrivateInformation = 'Super private';
+  const _name = 'Turd Sandwich';
 
-    const getName = () => name
+  const getName = () => _name;
 
-    return {
-        getName
-    }
-}())
+  return {
+    getName
+  };
+}());
 ```
 
-Here, `presidentsPrivateInformation` and `name` are kept private. However, `name` can be accessed with the exposed `president.getName` method.
+Здесь, `presidentsPrivateInformation` и `name` хранятся приватно. В то же время, `name` доступна при помощи публичного 
+метода `president.getName`.
 
-```js
-president.getName() // Outputs 'Turd Sandwich'
-president.name // Outputs undefined
-president.presidentsPrivateInformation // Outputs undefined
+```ts
+president.getName();    // => 'Turd Sandwich'
+president._name;    // => undefined
+president._presidentsPrivateInformation;    // => undefined
 ```
 
-Structural Design Patterns
+Структурные шаблоны проектирования (Structural Design Patterns)
 ==========================
-In plain words
-> Structural patterns are mostly concerned with object composition or in other words how the entities can use each other. Or yet another explanation would be, they help in answering "How to build a software component?"
+Вкратце
+> Эти шаблоны в основном посвящены компоновке объектов (object composition). То есть тому, как сущности могут друг друга 
+использовать. Ещё одно объяснение: структурные шаблоны помогают ответить на вопрос «Как построить программный компонент?»
 
-Wikipedia says
-> In software engineering, structural design patterns are design patterns that ease the design by identifying a simple way to realize relationships between entities.
+Википедия
+> Структурными называют шаблоны, которые облегчают проектирование, определяя простой способ реализации взаимоотношений 
+между сущностями.
   
- * [Adapter](#-adapter)
- * [Bridge](#-bridge)
- * [Composite](#-composite)
- * [Decorator](#-decorator)
- * [Facade](#-facade)
- * [Flyweight](#-flyweight)
- * [Proxy](#-proxy)
+ * [Адаптер (Adapter)](#-adapter)
+ * [Мост (Bridge)](#-bridge)
+ * [Компоновщик (Composite)](#-composite)
+ * [Декоратор (Decorator)](#-decorator)
+ * [Фасад (Facade)](#-facade)
+ * [Приспособленец (Flyweight)](#-flyweight)
+ * [Заместитель (Proxy)](#-proxy)
 
-🔌 Adapter
+🔌 Адаптер (Adapter)
 -------
-Real world example
-> Consider that you have some pictures in your memory card and you need to transfer them to your computer. In order to transfer them you need some kind of adapter that is compatible with your computer ports so that you can attach memory card to your computer. In this case card reader is an adapter.
-> Another example would be the famous power adapter a three legged plug can't be connected to a two pronged outlet, it needs to use a power adapter that makes it compatible with the two pronged outlet.
-> Yet another example would be a translator translating words spoken by one person to another
+Аналогия
+> Допустим, у вас на карте памяти есть какие-то картинки. Их нужно перенести на компьютер. Нужен адаптер, совместимый с 
+входным портом компьютера, в который можно вставить карту памяти. В данном примере адаптер — это картридер.
+> Ещё один пример: переходник, позволяющий использовать американский блок питания с российской розеткой.
+> Третий пример: переводчик — это адаптер, соединяющий двух людей, говорящих на разных языках.
 
-In plain words
-> Adapter pattern lets you wrap an otherwise incompatible object in an adapter to make it compatible with another class.
+Вкратце
+> Шаблон «Адаптер» позволяет помещать несовместимый объект в обёртку, чтобы он оказался совместимым с другим классом.
 
-Wikipedia says
-> In software engineering, the adapter pattern is a software design pattern that allows the interface of an existing class to be used as another interface. It is often used to make existing classes work with others without modifying their source code.
+Википедия
+> Шаблон проектирования «Адаптер» позволяет использовать интерфейс существующего класса как другой интерфейс. Этот шаблон 
+часто применяется для обеспечения работы одних классов с другими без изменения их исходного кода.
 
-**Programmatic Example**
+**Пример**
 
-Consider a game where there is a hunter and he hunts lions.
+Представим себе охотника на львов.
 
-First we have an interface `Lion` that all types of lions have to implement
+Создадим интерфейс `Lion`, который реализует все типы львов.
 
-```js
-/*
-Lion interface :
-
-roar()
-*/
-
-class AfricanLion  {
-    roar() {}
+```ts
+interface Lion {
+  roar(): void;
 }
 
-class AsianLion  {
-    roar() {}
+class AfricanLion implements Lion {
+  roar(): void {}
+}
+
+class AsianLion implements Lion {
+  roar(): void {}
 }
 ```
-And hunter expects any implementation of `Lion` interface to hunt.
-```js
+
+Охотник должен охотиться на все реализации интерфейса `Lion`.
+
+```ts
 class Hunter {
-    hunt(lion) {
-        // ... some code before
-        lion.roar()
-        //... some code after
-    }
+  hunt(lion: Lion): void {
+    // ... какой-то код
+    lion.roar();
+    // ... какой-то код
+  }
 }
 ```
 
-Now let's say we have to add a `WildDog` in our game so that hunter can hunt that also. But we can't do that directly because dog has a different interface. To make it compatible for our hunter, we will have to create an adapter that is compatible
+Добавим теперь дикую собаку `WildDog`, на которую охотник тоже может охотиться. Но у нас не получится сделать это 
+напрямую, потому что у собаки другой интерфейс. Чтобы она стала совместима с охотником, нужно создать подходящий адаптер.
  
-```js
-// This needs to be added to the game
+```ts
+// Это нужно добавить
 class WildDog {
-    bark() {
-    }
+  bark(): void {}
 }
 
-// Adapter around wild dog to make it compatible with our game
-class WildDogAdapter {
+// Адаптер вокруг собаки сделает её совместимой с охотником
+class WildDogAdapter implements Lion {
+  dog: WildDog;
 
-    constructor(dog) {
-        this.dog = dog;
-    }
-    
-    roar() {
-        this.dog.bark();
-    }
+  constructor(dog: WildDog) {
+    this.dog = dog;
+  }
+
+  roar(): void {
+    this.dog.bark();
+  }
 }
 ```
-And now the `WildDog` can be used in our game using `WildDogAdapter`.
 
-```js
-wildDog = new WildDog()
-wildDogAdapter = new WildDogAdapter(wildDog)
+Теперь `WildDog` может вступить в игру действие благодаря `WildDogAdapter`.
 
-hunter = new Hunter()
-hunter.hunt(wildDogAdapter)
+```ts
+let wildDog = new WildDog();
+let wildDogAdapter = new WildDogAdapter(wildDog);
+let hunter = new Hunter();
+
+hunter.hunt(wildDogAdapter);
 ```
 
 🚡 Bridge
 ------
-Real world example
-> Consider you have a website with different pages and you are supposed to allow the user to change the theme. What would you do? Create multiple copies of each of the pages for each of the themes or would you just create separate theme and load them based on the user's preferences? Bridge pattern allows you to do the second i.e.
+Аналогия
+> Допустим, у вас есть сайт с несколькими страницами. Вы хотите позволить пользователям менять темы оформления страниц. 
+Как бы вы поступили? Создали множественные копии каждой страницы для каждой темы или просто сделали отдельные темы и 
+подгружали их в соответствии с настройками пользователей? Шаблон «Мост» позволяет реализовать второй подход.
 
-![With and without the bridge pattern](https://cloud.githubusercontent.com/assets/11269635/23065293/33b7aea0-f515-11e6-983f-98823c9845ee.png)
+![С «Мостом» и без него](https://cloud.githubusercontent.com/assets/11269635/23065293/33b7aea0-f515-11e6-983f-98823c9845ee.png)
 
-In Plain Words
-> Bridge pattern is about preferring composition over inheritance. Implementation details are pushed from a hierarchy to another object with a separate hierarchy.
+Вкратце
+> Шаблон «Мост» — это предпочтение компоновки наследованию. Подробности реализации передаются из одной иерархии другому 
+объекту с отдельной иерархией.
 
-Wikipedia says
-> The bridge pattern is a design pattern used in software engineering that is meant to "decouple an abstraction from its implementation so that the two can vary independently"
+Википедия
+> Шаблон «Мост» означает отделение абстракции от реализации, чтобы их обе можно было изменять независимо друг от друга.
 
-**Programmatic Example**
+**Пример**
 
-Translating our WebPage example from above. Here we have the `WebPage` hierarchy
+Реализуем вышеописанный пример с веб-страницами. Сделаем иерархию `WebPage`:
 
-```js
-/*
-Webpage interface :
-
-constructor(theme)
-getContent()
-*/
-
-class About{ 
-    constructor(theme) {
-        this.theme = theme
-    }
-    
-    getContent() {
-        return "About page in " . this.theme.getColor()
-    }
+```ts
+interface Webpage {
+  getContent(): string;
 }
 
-class Careers{
-   constructor(theme) {
-       this.theme = theme
-   }
-   
-   getContent() {
-       return "Careers page in " . this.theme.getColor()
-   } 
-}
-```
-And the separate theme hierarchy
-```js
-/*
-Theme interface :
+class About implements Webpage {
+  theme: Theme;
 
-getColor()
-*/
+  constructor(theme: Theme) {
+    this.theme = theme;
+  }
 
-class DarkTheme{
-    getColor() {
-        return 'Dark Black'
-    }
+  getContent(): string {
+    return `About page in ${this.theme.getColor()}`;
+  }
 }
-class LightTheme{
-    getColor() {
-        return 'Off white'
-    }
-}
-class AquaTheme{
-    getColor() {
-        return 'Light blue'
-    }
+
+class Careers implements Webpage {
+  theme: Theme;
+
+  constructor(theme: Theme) {
+    this.theme = theme;
+  }
+
+  getContent(): string {
+    return `Careers page in ${this.theme.getColor()}`
+  }
 }
 ```
-And both the hierarchies
-```js
-const darkTheme = new DarkTheme()
 
-const about = new About(darkTheme)
-const careers = new Careers(darkTheme)
+Отделим иерархию тем:
 
-console.log(about.getContent() )// "About page in Dark Black"
-console.log(careers.getContent() )// "Careers page in Dark Black"
+```ts
+interface Theme {
+  getColor(): string;
+}
+
+class DarkTheme implements Theme {
+  getColor(): string {
+    return 'Dark Black';
+  }
+}
+
+class LightTheme implements Theme {
+  getColor(): string {
+    return 'Off white';
+  }
+}
+
+class AquaTheme implements Theme {
+  getColor(): string {
+    return 'Light blue';
+  }
+}
 ```
 
-🌿 Composite
+Обе иерархии:
+
+```ts
+const darkTheme = new DarkTheme();
+
+const about = new About(darkTheme);
+const careers = new Careers(darkTheme);
+
+console.log(about.getContent());    // => 'About page in Dark Black'
+console.log(careers.getContent());    // => 'Careers page in Dark Black'
+```
+
+🌿 Компоновщик (Composite)
 -----------------
 
-Real world example
-> Every organization is composed of employees. Each of the employees has same features i.e. has a salary, has some responsibilities, may or may not report to someone, may or may not have some subordinates etc.
+Аналогия
+> Каждая компания состоит из сотрудников. У каждого сотрудника есть одни и те же свойства: зарплата, обязанности, 
+отчётность перед кем-то, субординация...
 
-In plain words
-> Composite pattern lets clients to treat the individual objects in a uniform manner.
+Вкратце
+> Шаблон «Компоновщик» позволяет клиентам обрабатывать отдельные объекты в едином порядке.
 
-Wikipedia says
-> In software engineering, the composite pattern is a partitioning design pattern. The composite pattern describes that a group of objects is to be treated in the same way as a single instance of an object. The intent of a composite is to "compose" objects into tree structures to represent part-whole hierarchies. Implementing the composite pattern lets clients treat individual objects and compositions uniformly.
+Википедия
+> Шаблон «Компоновщик» описывает общий порядок обработки группы объектов, словно это одиночный экземпляр объекта. Суть 
+шаблона — компонование объектов в древовидную структуру для представления иерархии от частного к целому. Шаблон позволяет 
+клиентам одинаково обращаться к отдельным объектам и к группам объектов.
 
-**Programmatic Example**
+**Пример**
 
-Taking our employees example from above. Here we have different employee types
+Вот разные типы сотрудников:
 
-```js
-/*
-Employee interface :
-
-constructor(name, salary)
-getName()
-setSalary()
-getSalary()
-getRoles()
-*/
-
-class Developer {
-
-    constructor(name, salary) {
-        this.name = name
-        this.salary = salary
-    }
-
-    getName() {
-        return this.name
-    }
-
-    setSalary(salary) {
-        this.salary = salary
-    }
-
-    getSalary() {
-        return this.salary
-    }
-
-    getRoles() {
-        return this.roles
-    }
-
-    develop() {
-        /* */
-    }
+```ts
+interface Employee {
+  getName(): string;
+  setSalary(salary: number): void;
+  getSalary(): number;
 }
 
-class Designer {
+class Developer implements Employee {
+  name: string;
+  salary: number;
 
-    constructor(name, salary) {
-        this.name = name
-        this.salary = salary
-    }
+  constructor(name: string, salary: number) {
+    this.name = name;
+    this.salary = salary;
+  }
 
-    getName() {
-        return this.name
-    }
+  getName(): string {
+    return this.name;
+  }
 
-    setSalary(salary) {
-        this.salary = salary
-    }
+  setSalary(salary: number): void {
+    this.salary = salary;
+  }
 
-    getSalary() {
-        return this.salary
-    }
+  getSalary(): number {
+    return this.salary;
+  }
+}
 
-    getRoles() {
-        return this.roles
-    }
+class Designer implements Employee {
+  name: string;
+  salary: number;
 
-    design() {
-        /* */
-    }
+  constructor(name: string, salary: number) {
+    this.name = name;
+    this.salary = salary;
+  }
+
+  getName(): string {
+    return this.name;
+  }
+
+  setSalary(salary: number): void {
+    this.salary = salary;
+  }
+
+  getSalary(): number {
+    return this.salary;
+  }
 }
 ```
 
-Then we have an organization which consists of several different types of employees
+А вот компания, которая состоит из сотрудников разных типов:
 
-```js
+```ts
 class Organization {
-    constructor(){
-        this.employees = []
-    }
+  employees: Employee[];
 
-    addEmployee(employee) {
-        this.employees.push(employee)
-    }
+  constructor() {
+    this.employees = [];
+  }
 
-    getNetSalaries() {
-        let netSalary = 0
+  addEmployee(employee: Employee) {
+    this.employees.push(employee);
+  }
 
-        this.employees.forEach(employee => {
-            netSalary += employee.getSalary()
-        })
+  getNetSalaries(): number {
+    let netSalary = 0;
 
-        return netSalary
-    }
+    this.employees.forEach(employee => {
+      netSalary += employee.getSalary();
+    });
+
+    return netSalary;
+  }
 }
 ```
 
-And then it can be used as
+Использование:
 
-```js
-// Prepare the employees
-const john = new Developer('John Doe', 12000)
-const jane = new Designer('Jane', 10000)
+```ts
+// Подготовка сотрудников
+const john = new Developer('John Doe', 12000);
+const jane = new Designer('Jane Doe', 10000);
 
-// Add them to organization
-const organization = new Organization()
-organization.addEmployee(john)
-organization.addEmployee(jane)
+// Включение их в штат
+const organization = new Organization();
 
-console.log("Net salaries: " , organization.getNetSalaries()) // Net Salaries: 22000
+organization.addEmployee(john);
+organization.addEmployee(jane);
+
+console.log(`Net salaries: ${organization.getNetSalaries()}`);    // => Net Salaries: 22000
 ```
 
-☕ Decorator
+☕ Декоратор (Decorator)
 -------------
 
-Real world example
+Аналогия
 
-> Imagine you run a car service shop offering multiple services. Now how do you calculate the bill to be charged? You pick one service and dynamically keep adding to it the prices for the provided services till you get the final cost. Here each type of service is a decorator.
+> Допустим, у вас свой автосервис, оказывающий различные услуги. Как выставлять клиентам счёт? Добавлять последовательно 
+услуги и их стоимость — и в конце концов получится итоговая сумма к оплате. Здесь каждый тип услуги — это «декоратор».
 
-In plain words
-> Decorator pattern lets you dynamically change the behavior of an object at run time by wrapping them in an object of a decorator class.
+Вкратце
+> Шаблон «Декоратор» позволяет во время выполнения динамически изменять поведение объекта, обёртывая его в объект класса 
+«декоратора».
 
-Wikipedia says
-> In object-oriented programming, the decorator pattern is a design pattern that allows behavior to be added to an individual object, either statically or dynamically, without affecting the behavior of other objects from the same class. The decorator pattern is often useful for adhering to the Single Responsibility Principle, as it allows functionality to be divided between classes with unique areas of concern.
+Википедия
+> Шаблон «Декоратор» позволяет подключать к объекту дополнительное поведение (статически или динамически), не влияя на 
+поведение других объектов того же класса. Шаблон часто используется для соблюдения принципа единственной обязанности 
+(Single Responsibility Principle), поскольку позволяет разделить функциональность между классами для решения конкретных 
+задач.
 
-**Programmatic Example**
+**Пример**
 
-Lets take coffee for example. First of all we have a simple coffee implementing the coffee interface
+Возьмём в качестве примера кофе. Сначала просто реализуем интерфейс:
 
-```js
-/*
-Coffee interface:
-getCost()
-getDescription()
-*/
+```ts
+interface Coffee {
+  getCost(): number;
+  getDescription(): string;
+}
 
-class SimpleCoffee{
+class SimpleCoffee implements Coffee {
+  getCost(): number {
+    return 10;
+  }
 
-    getCost() {
-        return 10
-    }
-
-    getDescription() {
-        return 'Simple coffee'
-    }
+  getDescription(): string {
+    return 'Simple coffee';
+  }
 }
 ```
-We want to make the code extensible to allow options to modify it if required. Lets make some add-ons (decorators)
-```js
-class MilkCoffee {
 
+Можно сделать код расширяемым, чтобы при необходимости вносить модификации. Добавим «декораторы»:
 
-    constructor(coffee) {
-        this.coffee = coffee
-    }
+```ts
+class MilkCoffee implements Coffee {
+  coffee: Coffee;
 
-    getCost() {
-        return this.coffee.getCost() + 2
-    }
+  constructor(coffee: Coffee) {
+    this.coffee = coffee;
+  }
 
-    getDescription() {
-        return this.coffee.getDescription() + ', milk'
-    }
+  getCost(): number {
+    return this.coffee.getCost() + 2;
+  }
+
+  getDescription(): string {
+    return `${this.coffee.getDescription()}, milk`;
+  }
 }
 
-class WhipCoffee {
+class WhipCoffee implements Coffee {
+  coffee: Coffee;
 
-    constructor(coffee) {
-        this.coffee = coffee
-    }
+  constructor(coffee: Coffee) {
+    this.coffee = coffee;
+  }
 
-    getCost() {
-        return this.coffee.getCost() + 5
-    }
+  getCost(): number {
+    return this.coffee.getCost() + 5;
+  }
 
-    getDescription() {
-        return this.coffee.getDescription() + ', whip'
-    }
+  getDescription(): string {
+    return `${this.coffee.getDescription()}, whip`;
+  }
 }
 
-class VanillaCoffee {
+class VanillaCoffee implements Coffee {
+  coffee: Coffee;
 
-    constructor(coffee) {
-        this.coffee = coffee
-    }
+  constructor(coffee: Coffee) {
+    this.coffee = coffee;
+  }
 
-    getCost() {
-        return this.coffee.getCost() + 3
-    }
+  getCost(): number {
+    return this.coffee.getCost() + 3;
+  }
 
-    getDescription() {
-        return this.coffee.getDescription() + ', vanilla'
-    }
+  getDescription(): string {
+    return `${this.coffee.getDescription()}, vanilla`;
+  }
 }
-
 ```
 
-Lets make a coffee now
+Теперь приготовим кофе:
 
-```js
-let someCoffee
+```ts
+let someCoffee;
 
-someCoffee = new SimpleCoffee()
-console.log(someCoffee.getCost())// 10
-console.log(someCoffee.getDescription())// Simple Coffee
+someCoffee = new SimpleCoffee();
+console.log(someCoffee.getCost());    // => 10
+console.log(someCoffee.getDescription());    // => Simple Coffee
 
-someCoffee = new MilkCoffee(someCoffee)
-console.log(someCoffee.getCost())// 12
-console.log(someCoffee.getDescription())// Simple Coffee, milk
+someCoffee = new MilkCoffee(someCoffee);
+console.log(someCoffee.getCost());    // => 12
+console.log(someCoffee.getDescription());    // => Simple Coffee, milk
 
-someCoffee = new WhipCoffee(someCoffee)
-console.log(someCoffee.getCost())// 17
-console.log(someCoffee.getDescription())// Simple Coffee, milk, whip
+someCoffee = new WhipCoffee(someCoffee);
+console.log(someCoffee.getCost());    // => 17
+console.log(someCoffee.getDescription());    // => Simple Coffee, milk, whip
 
-someCoffee = new VanillaCoffee(someCoffee)
-console.log(someCoffee.getCost())// 20
-console.log(someCoffee.getDescription())// Simple Coffee, milk, whip, vanilla
+someCoffee = new VanillaCoffee(someCoffee);
+console.log(someCoffee.getCost());    // => 20
+console.log(someCoffee.getDescription());    // => Simple Coffee, milk, whip, vanilla
 ```
 
-📦 Facade
+📦 Фасад (Facade)
 ----------------
 
-Real world example
-> How do you turn on the computer? "Hit the power button" you say! That is what you believe because you are using a simple interface that computer provides on the outside, internally it has to do a lot of stuff to make it happen. This simple interface to the complex subsystem is a facade.
+Аналогия
+> Как включить компьютер? Вы скажете: «Нажать кнопку включения». Это потому, что вы используете простой интерфейс, 
+предоставляемый компьютером наружу. А внутри него происходит очень много процессов. Простой интерфейс для сложной 
+подсистемы — это фасад.
 
-In plain words
-> Facade pattern provides a simplified interface to a complex subsystem.
+Вкратце
+> Шаблон «Фасад» предоставляет упрощённый интерфейс для сложной подсистемы.
 
-Wikipedia says
-> A facade is an object that provides a simplified interface to a larger body of code, such as a class library.
+Википедия
+> «Фасад» — это объект, предоставляющий упрощённый интерфейс для более крупного тела кода, например библиотеки классов.
 
-**Programmatic Example**
-Taking our computer example from above. Here we have the computer class
+**Пример**
 
-```js
+Создадим класс `computer`:
+
+```ts
 class Computer {
+  getElectricShock(): void {
+    console.log('Ой!');
+  }
 
-    getElectricShock() {
-        console.log('Ouch!')
-    }
+  makeSound(): void {
+    console.log('Бип-бип!');
+  }
 
-    makeSound() {
-        console.log('Beep beep!')
-    }
+  showLoadingScreen(): void {
+    console.log('Загрузка..');
+  }
 
-    showLoadingScreen() {
-        console.log('Loading..')
-    }
+  bam(): void {
+    console.log('Готов к использованию!');
+  }
 
-    bam() {
-        console.log('Ready to be used!')
-    }
+  closeEverything(): void {
+    console.log('Бап-бап-бап-базззз!');
+  }
 
-    closeEverything() {
-        console.log('Bup bup bup buzzzz!')
-    }
+  sooth(): void {
+    console.log('Ззззз');
+  }
 
-    sooth() {
-        console.log('Zzzzz')
-    }
-
-    pullCurrent() {
-        console.log('Haaah!')
-    }
+  pullCurrent(): void {
+    console.log('Хааа!');
+  }
 }
 ```
-Here we have the facade
-```js
-class ComputerFacade
-{
-    constructor(computer) {
-        this.computer = computer
-    }
 
-    turnOn() {
-        this.computer.getElectricShock()
-        this.computer.makeSound()
-        this.computer.showLoadingScreen()
-        this.computer.bam()
-    }
+Теперь «фасад»:
 
-    turnOff() {
-        this.computer.closeEverything()
-        this.computer.pullCurrent()
-        this.computer.sooth()
-    }
+```ts
+class ComputerFacade {
+  computer: Computer;
+
+  constructor(computer: Computer) {
+    this.computer = computer;
+  }
+
+  turnOn(): void {
+    this.computer.getElectricShock();
+    this.computer.makeSound();
+    this.computer.showLoadingScreen();
+    this.computer.bam();
+  }
+
+  turnOff(): void {
+    this.computer.closeEverything();
+    this.computer.pullCurrent();
+    this.computer.sooth();
+  }
 }
 ```
-Now to use the facade
-```js
-const computer = new ComputerFacade(new Computer())
-computer.turnOn() // Ouch! Beep beep! Loading.. Ready to be used!
-computer.turnOff() // Bup bup buzzz! Haah! Zzzzz
+
+Использование:
+
+```ts
+const computer = new ComputerFacade(new Computer());
+
+computer.turnOn();    // => Ой! Бип-бип! Загрузка.. Готов к использованию!
+computer.turnOff();    // => Бап-бап-бап-базззз! Хааа! Ззззз
 ```
 
-🍃 Flyweight
+🍃 Приспособленец (Flyweight)
 ---------
 
-Real world example
-> Did you ever have fresh tea from some stall? They often make more than one cup that you demanded and save the rest for any other customer so to save the resources e.g. gas etc. Flyweight pattern is all about that i.e. sharing.
+Аналогия
+> Обычно в заведениях общепита чай заваривают не отдельно для каждого клиента, а сразу в некой крупной ёмкости. Это 
+позволяет экономить ресурсы: газ/электричество, время и т. д. Шаблон «Приспособленец» как раз посвящён общему 
+использованию (sharing).
 
-In plain words
-> It is used to minimize memory usage or computational expenses by sharing as much as possible with similar objects.
+Вкратце
+> Шаблон применяется для минимизирования использования памяти или вычислительной стоимости за счёт общего использования 
+как можно большего количества одинаковых объектов.
 
-Wikipedia says
-> In computer programming, flyweight is a software design pattern. A flyweight is an object that minimizes memory use by sharing as much data as possible with other similar objects it is a way to use objects in large numbers when a simple repeated representation would use an unacceptable amount of memory.
+Википедия
+> «Приспособленец» — это объект, минимизирующий использование памяти за счёт общего с другими, такими же объектами 
+использования как можно большего объёма данных. Это способ применения многочисленных объектов, когда простое 
+повторяющееся представление приведёт к неприемлемому потреблению памяти.
 
-**Programmatic example**
-Translating our tea example from above. First of all we have tea types and tea maker
+**Пример**
 
-```js
-// Anything that will be cached is flyweight. 
-// Types of tea here will be flyweights.
-class KarakTea {
-}
+Сделаем типы чая и чайника.
 
-// Acts as a factory and saves the tea
+```ts
+// Приспособленец — то, что будет закешировано.
+// Типы чая здесь — приспособленцы.
+class KarakTea {}
+
+// Действует как фабрика и экономит чай
 class TeaMaker {
-    constructor(){
-        this.availableTea = {}
-    }
+  availableTea: object;
 
-    make(preference) {
-        this.availableTea[preference] = this.availableTea[preference] || (new KarakTea())
-        return this.availableTea[preference]
-    }
+  constructor() {
+    this.availableTea = {};
+  }
+
+  make(preference: string): KarakTea {
+    this.availableTea[preference] = this.availableTea[preference] || (new KarakTea());
+
+    return this.availableTea[preference];
+  }
 }
 ```
 
-Then we have the `TeaShop` which takes orders and serves them
+Сделаем забегаловку `TeaShop`, принимающую и обрабатывающую заказы:
 
-```js
+```ts
 class TeaShop {
-    constructor(teaMaker) {
-        this.teaMaker = teaMaker
-        this.orders = []
-    }
+  teaMaker: TeaMaker;
+  orders: object[];
 
-    takeOrder(teaType, table) {
-        this.orders[table] = this.teaMaker.make(teaType)
-    }
+  constructor(teaMaker: TeaMaker) {
+    this.teaMaker = teaMaker;
+    this.orders = [];
+  }
 
-    serve() {
-        this.orders.forEach((order, index) => {
-            console.log('Serving tea to table#' + index)
-        })
-    }
+  takeOrder(teaType: string, table: number): void {
+    this.orders[table] = this.teaMaker.make(teaType);
+  }
+
+  serve(): void {
+    this.orders.forEach((order, index) => {
+      console.log(`Сервировка чая на стол №${index}`);
+    });
+  }
 }
 ```
-And it can be used as below
 
-```js
-const teaMaker = new TeaMaker()
-const shop = new TeaShop(teaMaker)
+Использование:
 
-shop.takeOrder('less sugar', 1)
-shop.takeOrder('more milk', 2)
-shop.takeOrder('without sugar', 5)
+```ts
+const teaMaker = new TeaMaker();
+const shop = new TeaShop(teaMaker);
 
-shop.serve()
-// Serving tea to table# 1
-// Serving tea to table# 2
-// Serving tea to table# 5
+shop.takeOrder('меньше сахара', 1);
+shop.takeOrder('больше молока', 2);
+shop.takeOrder('без сахара', 5);
+
+shop.serve();
+// => Сервировка чая на стол №1
+// => Сервировка чая на стол №2
+// => Сервировка чая на стол №5
 ```
 
-🎱 Proxy
+🎱 Заместитель (Proxy)
 -------------------
-Real world example
-> Have you ever used an access card to go through a door? There are multiple options to open that door i.e. it can be opened either using access card or by pressing a button that bypasses the security. The door's main functionality is to open but there is a proxy added on top of it to add some functionality. Let me better explain it using the code example below.
+Аналогия
+> Открыть дверь с электронным замком можно с помощью карточки доступа (access card) или кнопки для обхода системы 
+безопасности. То есть основная функциональность двери — открыться, а поверх неё может быть ещё какая-то функциональность 
+— «заместитель».
 
-In plain words
-> Using the proxy pattern, a class represents the functionality of another class.
+Вкратце
+> С помощью шаблона «Заместитель» класс представляет функциональность другого класса.
 
-Wikipedia says
-> A proxy, in its most general form, is a class functioning as an interface to something else. A proxy is a wrapper or agent object that is being called by the client to access the real serving object behind the scenes. Use of the proxy can simply be forwarding to the real object, or can provide additional logic. In the proxy extra functionality can be provided, for example caching when operations on the real object are resource intensive, or checking preconditions before operations on the real object are invoked.
+Википедия
+> В наиболее общей форме «Заместитель» — это класс, функционирующий как интерфейс к чему-либо. Это оболочка или объект-
+агент, вызываемый клиентом для получения доступа к другому, «настоящему» объекту. «Заместитель» может просто 
+переадресовывать запросы настоящему объекту, а может предоставлять дополнительную логику: кеширование данных при 
+интенсивном выполнении операций или потреблении ресурсов настоящим объектом; проверка предварительных условий 
+(preconditions) до вызова выполнения операций настоящим объектом.
 
-**Programmatic Example**
-Taking our security door example from above. Firstly we have the door interface and an implementation of door
+**Пример**
 
-```js
-/*
-Door interface :
+Реализуем интерфейс двери и саму дверь:
 
-open()
-close()
-*/
+```ts
+interface Door {
+  open(): void;
+  close(): void;
+}
 
-class LabDoor {
-    open() {
-        console.log('Opening lab door')
-    }
+class LabDoor implements Door {
+  open(): void {
+    console.log('Открытие лабораторной двери');
+  }
 
-    close() {
-        console.log('Closing the lab door')
-    }
+  close(): void {
+    console.log('Закрытие лабораторной двери');
+  }
 }
 ```
-Then we have a proxy to secure any doors that we want
-```js
+
+Сделаем «заместителя», чтобы дверь могла выполнять защитную функцию:
+
+```ts
 class Security {
-    constructor(door) {
-        this.door = door
-    }
+  door: Door;
 
-    open(password) {
-        if (this.authenticate(password)) {
-            this.door.open()
-        } else {
-        	console.log('Big no! It ain\'t possible.')
-        }
-    }
+  constructor(door: Door) {
+    this.door = door;
+  }
 
-    authenticate(password) {
-        return password === 'ecr@t'
+  open(password: string): void {
+    if (this.authenticate(password)) {
+      this.door.open();
+    } else {
+      console.log('Это невозможно.');
     }
+  }
 
-    close() {
-        this.door.close()
-    }
+  authenticate(password: string): boolean {
+    return password === '$ecr@t';
+  }
+
+  close(): void {
+    this.door.close();
+  }
 }
 ```
-And here is how it can be used
-```js
-const door = new Security(new LabDoor())
-door.open('invalid') // Big no! It ain't possible.
 
-door.open('ecr@t') // Opening lab door
-door.close() // Closing lab door
+Использование:
+
+```ts
+const door = new Security(new LabDoor());
+
+door.open('invalid');    // => Это невозможно.
+door.open('$ecr@t');    // => Открытие лабораторной двери
+door.close();    // => Закрытие лабораторной двери
 ```
 
-Behavioral Design Patterns
+Поведенческие шаблоны проектирования (Behavioral Design Patterns)
 ==========================
 
-In plain words
-> It is concerned with assignment of responsibilities between the objects. What makes them different from structural patterns is they don't just specify the structure but also outline the patterns for message passing/communication between them. Or in other words, they assist in answering "How to run a behavior in software component?"
+Вкратце
+> Они связаны с присвоением обязанностей (responsibilities) объектам. От структурных шаблонов они отличаются тем, что не 
+просто описывают структуру, но и очерчивают шаблоны передачи данных, обеспечения взаимодействия. То есть поведенческие 
+шаблоны позволяют ответить на вопрос «Как реализовать поведение в программном компоненте?»
 
-Wikipedia says
-> In software engineering, behavioral design patterns are design patterns that identify common communication patterns between objects and realize these patterns. By doing so, these patterns increase flexibility in carrying out this communication.
+Википедия
+> Поведенческие шаблоны проектирования определяют алгоритмы и способы реализации взаимодействия различных объектов и 
+классов. Они обеспечивают гибкость взаимодействия между объектами.
 
-* [Chain of Responsibility](#-chain-of-responsibility)
-* [Command](#-command)
-* [Iterator](#-iterator)
-* [Mediator](#-mediator)
-* [Memento](#-memento)
-* [Observer](#-observer)
-* [Visitor](#-visitor)
-* [Strategy](#-strategy)
-* [State](#-state)
-* [Template Method](#-template-method)
+* [Цепочка ответственности (Chain of Responsibility)](#-chain-of-responsibility)
+* [Команда (Command)](#-command)
+* [Итератор (Iterator)](#-iterator)
+* [Посредник (Mediator)](#-mediator)
+* [Хранитель (Memento)](#-memento)
+* [Наблюдатель (Observer)](#-observer)
+* [Посетитель (Visitor)](#-visitor)
+* [Стратегия (Strategy)](#-strategy)
+* [Состояние (State)](#-state)
+* [Шаблонный метод (Template Method)](#-template-method)
 
-🔗 Chain of Responsibility
+🔗 Цепочка ответственности (Chain of Responsibility)
 -----------------------
 
-Real world example
-> For example, you have three payment methods (`A`, `B` and `C`) setup in your account each having a different amount in it. `A` has 100 USD, `B` has 300 USD and `C` having 1000 USD and the preference for payments is chosen as `A` then `B` then `C`. You try to purchase something that is worth 210 USD. Using Chain of Responsibility, first of all account `A` will be checked if it can make the purchase, if yes purchase will be made and the chain will be broken. If not, request will move forward to account `B` checking for amount if yes chain will be broken otherwise the request will keep forwarding till it finds the suitable handler. Here `A`, `B` and `C` are links of the chain and the whole phenomenon is Chain of Responsibility.
+Аналогия
+> Допустим, для вашего банковского счёта доступны три способа оплаты (`A`, `B` и `C`). Каждый подразумевает разные 
+доступные суммы денег: `A` — 100 долларов, `B` — 300, `C` — 1000. Приоритетность способов при оплате: `А`, затем `В`, 
+затем `С`. Вы пытаетесь купить что-то за 210 долларов. На основании «цепочки ответственности» система попытается 
+оплатить способом `А`. Если денег хватает — то оплата проходит, а цепочка прерывается. Если денег не хватает — то система 
+переходит к способу `В`, и т. д.
 
-In plain words
-> It helps building a chain of objects. Request enters from one end and keeps going from object to object till it finds the suitable handler.
+Вкратце
+> Шаблон «Цепочка ответственности» позволяет создавать цепочки объектов. Запрос входит с одного конца цепочки и движется 
+от объекта к объекту, пока не будет найден подходящий обработчик.
 
-Wikipedia says
-> In object-oriented design, the chain-of-responsibility pattern is a design pattern consisting of a source of command objects and a series of processing objects. Each processing object contains logic that defines the types of command objects that it can handle the rest are passed to the next processing object in the chain.
+Википедия
+> Шаблон «Цепочка ответственности» содержит исходный управляющий объект и ряд обрабатывающих объектов. Каждый 
+обрабатывающий объект содержит логику, определяющую типы командных объектов, которые он может обрабатывать, а остальные 
+передаются по цепочке следующему обрабатывающему объекту.
 
-**Programmatic Example**
+**Пример**
 
-Translating our account example above. First of all we have a base account having the logic for chaining the accounts together and some accounts
+Создадим основной банковский счёт, содержащий логику связывания счетов в цепочки, и сами счета.
 
-```js
-class Account {
+```ts
+abstract class Account {
+  successor: Account;
+  balance: number;
 
-    setNext(account) {
-        this.successor = account
+  setNext(account: Account): void {
+    this.successor = account;
+  }
+
+  pay(amountToPay: number): void {
+    if (this.canPay(amountToPay)) {
+      console.log(`Оплачено ${amountToPay} с помощью ${this.name}`);
+    } else if (this.successor) {
+      console.log(`Нельзя оплатить с помощью ${this.name}. Обрабатываю...`);
+      this.successor.pay(amountToPay);
+    } else {
+      console.log('Ни один из аккаунтов не имеет достаточного баланса');
     }
-    
-    pay(amountToPay) {
-        if (this.canPay(amountToPay)) {
-            console.log(`Paid ${amountToPay} using ${this.name}`)
-        } else if (this.successor) {
-            console.log(`Cannot pay using ${this.name}. Proceeding...`)
-            this.successor.pay(amountToPay)
-        } else {
-            console.log('None of the accounts have enough balance')
-        }
-    }
-    
-    canPay(amount) {
-        return this.balance >= amount
-    }
+  }
+
+  canPay(amount: number): boolean {
+    return this.balance >= amount;
+  }
 }
 
 class Bank extends Account {
-    constructor(balance) {
-        super()
-        this.name = 'bank'
-        this.balance = balance
-    }
+  constructor(balance: number) {
+    super();
+    this.name = 'Bank';
+    this.balance = balance;
+  }
 }
 
 class Paypal extends Account {
-    constructor(balance) {
-        super()        
-        this.name = 'Paypal'
-        this.balance = balance
-    }
+  constructor(balance: number) {
+    super();
+    this.name = 'Paypal';
+    this.balance = balance;
+  }
 }
 
 class Bitcoin extends Account {
-    constructor(balance) {
-        super()        
-        this.name = 'bitcoin'
-        this.balance = balance
-    }
+  constructor(balance: number) {
+    super();
+    this.name = 'Bitcoin';
+    this.balance = balance;
+  }
 }
 ```
 
-Now let's prepare the chain using the links defined above (i.e. Bank, Paypal, Bitcoin)
+Теперь с помощью определённых выше линков (Bank, Paypal, Bitcoin) подготовим цепочку:
 
-```js
-// Let's prepare a chain like below
+```ts
+// Сделаем такую цепочку
 //      bank.paypal.bitcoin
 //
-// First priority bank
-//      If bank can't pay then paypal
-//      If paypal can't pay then bit coin
+// Приоритет у банка
+//      Если банк не может оплатить, переходим к Paypal
+//      Если Paypal не может, переходим к Bitcoin
+const bank = new Bank(100);          // У банка баланс 100
+const paypal = new Paypal(200);      // У Paypal баланс 200
+const bitcoin = new Bitcoin(300);    // У Bitcoin баланс 300
 
-const bank = new Bank(100)          // Bank with balance 100
-const paypal = new Paypal(200)      // Paypal with balance 200
-const bitcoin = new Bitcoin(300)    // Bitcoin with balance 300
+bank.setNext(paypal);
+paypal.setNext(bitcoin);
 
-bank.setNext(paypal)
-paypal.setNext(bitcoin)
+// Начнём с банка
+bank.pay(259);
 
-// Let's try to pay using the first priority i.e. bank
-bank.pay(259)
-
-// Output will be
+// Выходной вид
 // ==============
-// Cannot pay using bank. Proceeding ..
-// Cannot pay using paypal. Proceeding ..: 
-// Paid 259 using Bitcoin!
+// Нельзя оплатить с помощью Bank. Обрабатываю...
+// Нельзя оплатить с помощью Paypal. Обрабатываю...
+// Оплачено 259 с помощью Bitcoin
 ```
 
-👮 Command
+👮 Команда (Command)
 -------
 
-Real world example
-> A generic example would be you ordering a food at restaurant. You (i.e. `Client`) ask the waiter (i.e. `Invoker`) to bring some food (i.e. `Command`) and waiter simply forwards the request to Chef (i.e. `Receiver`) who has the knowledge of what and how to cook. 
-> Another example would be you (i.e. `Client`) switching on (i.e. `Command`) the television (i.e. `Receiver`) using a remote control (`Invoker`).
+Аналогия
+> Вы пришли в ресторан. Вы (`Client`) просите официанта (`Invoker`) принести блюда (`Command`). Официант перенаправляет 
+запрос шеф-повару (`Receiver`), который знает, что и как готовить.
+> Другой пример: вы (`Client`) включаете (`Command`) телевизор (`Receiver`) с помощью пульта (`Invoker`).
 
-In plain words
-> Allows you to encapsulate actions in objects. The key idea behind this pattern is to provide the means to decouple client from receiver.
+Вкратце
+> Шаблон «Команда» позволяет инкапсулировать действия в объекты. Ключевая идея — предоставить средства отделения клиента 
+от получателя.
 
-Wikipedia says
-> In object-oriented programming, the command pattern is a behavioral design pattern in which an object is used to encapsulate all information needed to perform an action or trigger an event at a later time. This information includes the method name, the object that owns the method and values for the method parameters.
+Википедия
+> В шаблоне «Команда» объект используется для инкапсуляции всей информации, необходимой для выполнения действия либо для 
+его инициирования позднее. Информация включает в себя имя метода; объект, владеющий методом; значения параметров метода.
 
-**Programmatic Example**
+**Пример**
 
-First of all we have the receiver that has the implementation of every action that could be performed
-```js
-// Receiver
+Сначала сделаем получателя, содержащего реализации каждого действия, которое может быть выполнено.
+
+```ts
+// Получатель
 class Bulb {
-    turnOn() {
-        console.log('Bulb has been lit')
-    }
-    
-    turnOff() {
-        console.log('Darkness!')
-    }
+  turnOn(): void {
+    console.log('Лампочка зажглась!');
+  }
+
+  turnOff(): void {
+    console.log('Темнота!');
+  }
 }
 ```
-then we have an interface that each of the commands are going to implement and then we have a set of commands
-```js
-/*
-Command interface :
 
-    execute()
-    undo()
-    redo()
-*/
+Теперь сделаем интерфейс, который будет реализовывать каждая команда. Также сделаем набор команд.
 
-// Command
-class TurnOnCommand {
-    constructor(bulb) {
-        this.bulb = bulb
-    }
-    
-    execute() {
-        this.bulb.turnOn()
-    }
-    
-    undo() {
-        this.bulb.turnOff()
-    }
-    
-    redo() {
-        this.execute()
-    }
+```ts
+interface Command {
+  execute(): void;
+  undo(): void;
+  redo(): void;
 }
 
-class TurnOffCommand {
-    constructor(bulb) {
-        this.bulb = bulb
-    }
-    
-    execute() {
-        this.bulb.turnOff()
-    }
-    
-    undo() {
-        this.bulb.turnOn()
-    }
-    
-    redo() {
-        this.execute()
-    }
+// Команда
+class TurnOn implements Command {
+  bulb: Bulb;
+
+  constructor(bulb: Bulb) {
+    this.bulb = bulb;
+  }
+
+  execute(): void {
+    this.bulb.turnOn();
+  }
+
+  undo(): void {
+    this.bulb.turnOff();
+  }
+
+  redo(): void {
+    this.execute();
+  }
+}
+
+class TurnOff implements Command {
+  bulb: Bulb;
+
+  constructor(bulb: Bulb) {
+    this.bulb = bulb;
+  }
+
+  execute(): void {
+    this.bulb.turnOff();
+  }
+
+  undo(): void {
+    this.bulb.turnOn();
+  }
+
+  redo(): void {
+    this.execute();
+  }
 }
 ```
-Then we have an `Invoker` with whom the client will interact to process any commands
-```js
-// Invoker
+
+Теперь сделаем вызывающего `Invoker`, с которым будет взаимодействовать клиент для обработки команд.
+
+```ts
+// Вызывающий
 class RemoteControl {
-    submit(command) {
-        command.execute()
-    }
+  submit(command: Command): void {
+    command.execute();
+  }
 }
 ```
-Finally let's see how we can use it in our client
-```js
-const bulb = new Bulb()
 
-const turnOn = new TurnOnCommand(bulb)
-const turnOff = new TurnOffCommand(bulb)
+Посмотрим, как всё это может использовать клиент:
 
-const remote = new RemoteControl()
-remote.submit(turnOn) // Bulb has been lit!
-remote.submit(turnOff) // Darkness!
+```ts
+const bulb = new Bulb();
+
+const turnOn = new TurnOn(bulb);
+const turnOff = new TurnOff(bulb);
+
+const remote = new RemoteControl();
+remote.submit(turnOn);    // Лампочка зажглась!
+remote.submit(turnOff);    // Темнота!
 ```
 
-Command pattern can also be used to implement a transaction based system. Where you keep maintaining the history of commands as soon as you execute them. If the final command is successfully executed, all good otherwise just iterate through the history and keep executing the `undo` on all the executed commands. 
+Шаблон «Команда» можно использовать и для реализации системы на основе транзакций. То есть системы, в которой вы 
+сохраняете историю команд по мере их выполнения. Если последняя команда выполнена успешно, то всё хорошо. В противном 
+случае система итерирует по истории и делает `undo` для всех выполненных команд. 
 
-➿ Iterator
+➿ Итератор (Iterator)
 --------
 
-Real world example
-> An old radio set will be a good example of iterator, where user could start at some channel and then use next or previous buttons to go through the respective channels. Or take an example of MP3 player or a TV set where you could press the next and previous buttons to go through the consecutive channels or in other words they all provide an interface to iterate through the respective channels, songs or radio stations.  
+Аналогия
+> Хороший пример — радиоприёмник. Вы начинаете с какой-то радиостанции, а затем перемещаетесь по станциям вперёд/назад. 
+То есть устройство предоставляет интерфейс для итерирования по каналам.
 
-In plain words
-> It presents a way to access the elements of an object without exposing the underlying presentation.
+Вкратце
+> Шаблон — это способ доступа к элементам объекта без раскрытия базового представления.
 
-Wikipedia says
-> In object-oriented programming, the iterator pattern is a design pattern in which an iterator is used to traverse a container and access the container's elements. The iterator pattern decouples algorithms from containers in some cases, algorithms are necessarily container-specific and thus cannot be decoupled.
+Википедия
+> В этом шаблоне итератор используется для перемещения по контейнеру и обеспечения доступа к элементам контейнера. Шаблон 
+подразумевает отделение алгоритмов от контейнера. В каких-то случаях алгоритмы, специфичные для этого контейнера, не 
+могут быть отделены.
 
-**Programmatic example**
- Translating our radio stations example from above. First of all we have `RadioStation`
+**Пример**
 
-```js
+Сначала создадим радиостанцию `RadioStation`.
+
+```ts
 class RadioStation {
-    constructor(frequency) {
-        this.frequency = frequency    
-    }
-    
-    getFrequency() {
-        return this.frequency
-    }
+  frequency: number;
+
+  constructor(frequency: number) {
+    this.frequency = frequency;
+  }
+
+  getFrequency(): number {
+    return this.frequency;
+  }
 }
 ```
-Then we have our iterator
 
-```js
+Теперь создадим итератор:
+
+```ts
 class StationList {
-    constructor(){
-        this.stations = []
-    }
+  stations: RadioStation[];
 
-    addStation(station) {
-        this.stations.push(station)
-    }
-    
-    removeStation(toRemove) {
-        const toRemoveFrequency = toRemove.getFrequency()
-        this.stations = this.stations.filter(station => {
-            return station.getFrequency() !== toRemoveFrequency
-        })
-    }
+  constructor() {
+    this.stations = [];
+  }
+
+  addStation(station: RadioStation) {
+    this.stations.push(station);
+  }
+
+  removeStation(toRemove: RadioStation) {
+    const toRemoveFrequency: number = toRemove.getFrequency();
+    this.stations = this.stations.filter(station => {
+      return station.getFrequency() !== toRemoveFrequency;
+    });
+  }
 }
 ```
-And then it can be used as
-```js
-const stationList = new StationList()
 
-stationList.addStation(new RadioStation(89))
-stationList.addStation(new RadioStation(101))
-stationList.addStation(new RadioStation(102))
-stationList.addStation(new RadioStation(103.2))
+Использование:
 
-stationList.stations.forEach(station => console.log(station.getFrequency()))
+```ts
+const stationList: StationList = new StationList();
 
-stationList.removeStation(new RadioStation(89)) // Will remove station 89
+stationList.addStation(new RadioStation(89));
+stationList.addStation(new RadioStation(101));
+stationList.addStation(new RadioStation(102));
+stationList.addStation(new RadioStation(103.2));
+
+stationList.stations.forEach(station => console.log(station.getFrequency()));    // => 89 101 102 103.2
+
+stationList.removeStation(new RadioStation(89));    // Удалит станцию 89
 ```
 
-👽 Mediator
+👽 Посредник (Mediator)
 ========
 
-Real world example
-> A general example would be when you talk to someone on your mobile phone, there is a network provider sitting between you and them and your conversation goes through it instead of being directly sent. In this case network provider is mediator. 
+Аналогия
+> Когда вы говорите с кем-то по мобильнику, то между вами и собеседником находится мобильный оператор. То есть сигнал 
+передаётся через него, а не напрямую. В данном примере оператор — посредник. 
 
-In plain words
-> Mediator pattern adds a third party object (called mediator) to control the interaction between two objects (called colleagues). It helps reduce the coupling between the classes communicating with each other. Because now they don't need to have the knowledge of each other's implementation. 
+Вкратце
+> Шаблон «Посредник» подразумевает добавление стороннего объекта («посредника») для управления взаимодействием между 
+двумя объектами («коллегами»). Шаблон помогает уменьшить связанность (coupling) классов, общающихся друг с другом, ведь 
+теперь они не должны знать о реализациях своих собеседников.
 
-Wikipedia says
-> In software engineering, the mediator pattern defines an object that encapsulates how a set of objects interact. This pattern is considered to be a behavioral pattern due to the way it can alter the program's running behavior.
+Википедия
+> Шаблон определяет объект, который инкапсулирует способ взаимодействия набора объектов.
 
-**Programmatic Example**
+**Пример**
 
-Here is the simplest example of a chat room (i.e. mediator) with users (i.e. colleagues) sending messages to each other. 
+Простейший пример: чат («посредник»), в котором пользователи («коллеги») отправляют друг другу сообщения.
 
-First of all, we have the mediator i.e. the chat room 
+Создадим «посредника»:
 
-```js
-// Mediator
-class ChatRoom {
-    showMessage(user, message) {
-        const time = new Date()
-        const sender = user.getName()
+```ts
+interface ChatRoomMediator {
+  showMessage(user: User, message: string);
+}
 
-        console.log(time + '[' + sender + ']:' + message)
-    }
+// Посредник
+class ChatRoom implements ChatRoomMediator {
+  showMessage(user: User, message: string) {
+    const time = new Date();
+    const sender = user.getName();
+
+    console.log(`${time} [${sender}]: ${message}`);
+  }
 }
 ```
 
-Then we have our users i.e. colleagues
-```js
+Теперь создадим «коллег»:
+
+```ts
 class User {
-    constructor(name, chatMediator) {
-        this.name = name
-        this.chatMediator = chatMediator
-    }
-    
-    getName() {
-        return this.name
-    }
-    
-    send(message) {
-        this.chatMediator.showMessage(this, message)
-    }
+  name: string;
+  chatMediator: ChatRoomMediator;
+
+  constructor(name: string, chatMediator: ChatRoomMediator) {
+    this.name = name;
+    this.chatMediator = chatMediator;
+  }
+
+  getName(): string {
+    return this.name;
+  }
+
+  send(message): void {
+    this.chatMediator.showMessage(this, message);
+  }
 }
 ```
-And the usage
-```js
-const mediator = new ChatRoom()
 
-const john = new User('John Doe', mediator)
-const jane = new User('Jane Doe', mediator)
+Использование:
 
-john.send('Hi there!')
-jane.send('Hey!')
+```ts
+const mediator = new ChatRoom();
 
-// Output will be
-// Feb 14, 10:58 [John]: Hi there!
-// Feb 14, 10:58 [Jane]: Hey!
+const john = new User('John', mediator);
+const jane = new User('Jane', mediator);
+
+john.send('Hi there!');    // => Feb 14, 10:58 [John]: Hi there!
+jane.send('Hey!');    // => Feb 14, 10:58 [Jane]: Hey!
 ```
 
-💾 Memento
+💾 Хранитель (Memento)
 -------
-Real world example
-> Take the example of calculator (i.e. originator), where whenever you perform some calculation the last calculation is saved in memory (i.e. memento) so that you can get back to it and maybe get it restored using some action buttons (i.e. caretaker). 
+Аналогия
+> В качестве примера можно привести калькулятор («создатель»), у которого любая последняя выполненная операция 
+сохраняется в памяти («хранитель»), чтобы вы могли снова вызвать её с помощью каких-то кнопок («опекун»).
 
-In plain words
-> Memento pattern is about capturing and storing the current state of an object in a manner that it can be restored later on in a smooth manner.
+Вкратце
+> Шаблон «Хранитель» фиксирует и хранит текущее состояние объекта, чтобы оно легко восстанавливалось.
 
-Wikipedia says
-> The memento pattern is a software design pattern that provides the ability to restore an object to its previous state (undo via rollback).
+Википедия
+> Шаблон «Хранитель» позволяет восстанавливать объект в его предыдущем состоянии (отмена через откат — undo via rollback).
 
-Usually useful when you need to provide some sort of undo functionality.
+Обычно шаблон применяется, когда нужно реализовать функциональность отмены операции.
 
-**Programmatic Example**
+**Пример**
 
-Lets take an example of text editor which keeps saving the state from time to time and that you can restore if you want.
+Текстовый редактор время от времени сохраняет своё состояние, чтобы можно было восстановить текст в каком-то прошлом виде.
 
-First of all we have our memento object that will be able to hold the editor state
+Сначала создадим объект «хранитель», в котором можно сохранять состояние редактора.
 
-```js
+```ts
 class EditorMemento {
-    constructor(content) {
-        this._content = content
-    }
-    
-    getContent() {
-        return this._content
-    }
+  private _content: string;
+
+  constructor(content: string) {
+    this._content = content;
+  }
+
+  getContent(): string {
+    return this._content;
+  }
 }
 ```
 
-Then we have our editor i.e. originator that is going to use memento object
+Теперь сделаем редактор («создатель»), который будет использовать объект «хранитель».
 
-```js
+```ts
 class Editor {
-    constructor(){
-        this._content = ''
-    }
-    
-    type(words) {
-        this._content = this._content + ' ' + words
-    }
-    
-    getContent() {
-        return this._content
-    }
-    
-    save() {
-        return new EditorMemento(this._content)
-    }
-    
-    restore(memento) {
-        this._content = memento.getContent()
-    }
+  private _content: string;
+
+  constructor() {
+    this._content = '';
+  }
+
+  type(words: string): void {
+    this._content = this._content + ' ' + words;
+  }
+
+  getContent(): string {
+    return this._content;
+  }
+
+  save(): EditorMemento {
+    return new EditorMemento(this._content);
+  }
+
+  restore(memento: EditorMemento): void {
+    this._content = memento.getContent();
+  }
 }
 ```
 
-And then it can be used as 
+Использование: 
 
-```js
-const editor = new Editor()
+```ts
+const editor = new Editor();
 
-// Type some stuff
-editor.type('This is the first sentence.')
-editor.type('This is second.')
+// Пишем что-нибудь
+editor.type('Это первое предложение.');
+editor.type('Это второе.');
 
-// Save the state to restore to : This is the first sentence. This is second.
-const saved = editor.save()
+// Сохранение состояния в: This is the first sentence. This is second.
+const saved = editor.save();
 
-// Type some more
-editor.type('And this is third.')
+// Пишем ещё
+editor.type('А это третье.');
 
-// Output: Content before Saving
-console.log(editor.getContent())// This is the first sentence. This is second. And this is third.
+// Output: Содержимое до сохранения
+console.log(editor.getContent());    // => Это первое предложение. Это второе. А это третье.
 
-// Restoring to last saved state
-editor.restore(saved)
+// Восстанавливаем последнее сохранённое состояние
+editor.restore(saved);
 
-console.log(editor.getContent()) // This is the first sentence. This is second.
+console.log(editor.getContent());    // => Это первое предложение. Это второе.
 ```
 
-😎 Observer
+😎 Наблюдатель (Observer)
 --------
 
-(Otherwise known as _"pub-sub"_)
+(Также известен как _"pub-sub"_)
 
-Real world example
-> A good example would be the job seekers where they subscribe to some job posting site and they are notified whenever there is a matching job opportunity.   
+Аналогия
+> Хороший пример: люди, ищущие работу, подписываются на публикации на сайтах вакансий и получают уведомления, когда 
+появляются вакансии, подходящие по параметрам.
 
-In plain words
-> Defines a dependency between objects so that whenever an object changes its state, all its dependents are notified.
+Вкратце
+> Шаблон определяет зависимость между объектами, чтобы при изменении состояния одного из них его «подчинённые» узнавали 
+об этом.
 
-Wikipedia says
-> The observer pattern is a software design pattern in which an object, called the subject, maintains a list of its dependents, called observers, and notifies them automatically of any state changes, usually by calling one of their methods.
+Википедия
+> В шаблоне «Наблюдатель» есть объект («субъект»), ведущий список своих «подчинённых» («наблюдателей») и автоматически 
+уведомляющий их о любом изменении своего состояния, обычно с помощью вызова одного из их методов.
 
-**Programmatic example**
+**Пример**
 
-Translating our example from above. First of all we have job seekers that need to be notified for a job posting
-```js
-const JobPost = title => ({
-    title: title
-})
+Сначала реализуем людей, ищущих работу, которых нужно уведомлять о появлении вакансий.
+
+```ts
+class JobPost {
+  title: string;
+
+  constructor(title: string) {
+    this.title = title;
+  }
+}
 
 class JobSeeker {
-    constructor(name) {
-        this._name = name
-    }
+  private _name: string;
 
-    notify(jobPost) {
-        console.log(this._name, 'has been notified of a new posting :', jobPost.title)
-    }
+  constructor(name: string) {
+    this._name = name;
+  }
+
+  notify(jobPost: JobPost): void {
+    console.log(`${this._name} был уведомлен о новой вакансии: ${jobPost.title}`);
+  }
 }
 ```
-Then we have our job postings to which the job seekers will subscribe
-```js
+
+Теперь реализуем публикации вакансий, на которые люди будут подписываться.
+
+```ts
 class JobBoard {
-    constructor() {
-        this._subscribers = []
-    }
+  private _subscribers: JobSeeker[];
 
-    subscribe(jobSeeker) {
-        this._subscribers.push(jobSeeker)
-    }
+  constructor() {
+    this._subscribers = [];
+  }
 
-    addJob(jobPosting) {
-        this._subscribers.forEach(subscriber => {
-            subscriber.notify(jobPosting)
-        })
-    }
+  subscribe(jobSeeker: JobSeeker): void {
+    this._subscribers.push(jobSeeker);
+  }
+
+  addJob(jobPosting: JobPost): void {
+    this._subscribers.forEach(subscriber => {
+      subscriber.notify(jobPosting);
+    });
+  }
 }
 ```
-Then it can be used as
-```js
-// Create subscribers
-const jonDoe = new JobSeeker('John Doe')
-const janeDoe = new JobSeeker('Jane Doe')
-const kaneDoe = new JobSeeker('Kane Doe')
 
-// Create publisher and attach subscribers
-const jobBoard = new JobBoard()
-jobBoard.subscribe(jonDoe)
-jobBoard.subscribe(janeDoe)
+Использование:
 
-// Add a new job and see if subscribers get notified
-jobBoard.addJob(JobPost('Software Engineer'))
+```ts
+// Создаём подписчиков
+const jonDoe = new JobSeeker('John Doe');
+const janeDoe = new JobSeeker('Jane Doe');
+const kaneDoe = new JobSeeker('Kane Doe');
 
-// Output
-// John Doe has been notified of a new posting : Software Engineer
-// Jane Doe has been notified of a new posting : Software Engineer
+// Создаём публикатора и прикрепляем подписчиков
+const jobBoard = new JobBoard();
+
+jobBoard.subscribe(jonDoe);
+jobBoard.subscribe(janeDoe);
+
+// Добавляем новую вакансию и смотрим, будут ли уведомлены подписчики
+jobBoard.addJob(new JobPost('Software Engineer'));
+
+// => John Doe был уведомлен о новой вакансии: Software Engineer
+// => Jane Doe был уведомлен о новой вакансии: Software Engineer
 ```
 
 🏃 Visitor
 -------
-Real world example
-> Consider someone visiting Dubai. They just need a way (i.e. visa) to enter Dubai. After arrival, they can come and visit any place in Dubai on their own without having to ask for permission or to do some leg work in order to visit any place here just let them know of a place and they can visit it. Visitor pattern let's you do just that, it helps you add places to visit so that they can visit as much as they can without having to do any legwork.
+Аналогия
+> Туристы собрались в Дубай. Сначала им нужен способ попасть туда (виза). После прибытия они будут посещать любую часть 
+города, не спрашивая разрешения, ходить где вздумается. Просто скажите им о каком-нибудь месте — и туристы могут там 
+побывать. Шаблон «Посетитель» помогает добавлять места для посещения.
 
-In plain words
-> Visitor pattern let's you add further operations to objects without having to modify them.
+Вкратце
+> Шаблон «Посетитель» позволяет добавлять будущие операции для объектов без их модифицирования.
     
-Wikipedia says
-> In object-oriented programming and software engineering, the visitor design pattern is a way of separating an algorithm from an object structure on which it operates. A practical result of this separation is the ability to add new operations to existing object structures without modifying those structures. It is one way to follow the open/closed principle.
+Википедия
+> Шаблон «Посетитель» — это способ отделения алгоритма от структуры объекта, в которой он оперирует. Результат отделения 
+— возможность добавлять новые операции в существующие структуры объектов без их модифицирования. Это один из способов 
+соблюдения принципа открытости/закрытости (open/closed principle).
 
-**Programmatic example**
+**Пример**
 
-Let's take an example of a zoo simulation where we have several different kinds of animals and we have to make them Sound. Let's translate this using visitor pattern 
+Возьмём зоопарк: у нас есть несколько видов животных, и нам нужно послушать издаваемые ими звуки.
 
-We have our implementations for the animals
-```js
-class Monkey {
-    shout() {
-        console.log('Ooh oo aa aa!')
-    }
+Реализуем животных:
 
-    accept(operation) {
-        operation.visitMonkey(this)
-    }
+```ts
+// Место посещения
+interface Animal {
+  accept(operation: AnimalOperation);
 }
 
-class Lion {
-    roar() {
-        console.log('Roaaar!')
-    }
-    
-    accept(operation) {
-        operation.visitLion(this)
-    }
+// Посетитель
+interface AnimalOperation {
+  visitMonkey(monkey: Monkey);
+  visitLion(lion: Lion);
+  visitDolphin(dolphin: Dolphin);
 }
 
-class Dolphin {
-    speak() {
-        console.log('Tuut tuttu tuutt!')
-    }
-    
-    accept(operation) {
-        operation.visitDolphin(this)
-    }
+class Monkey implements Animal {
+  shout(): void {
+    console.log('Ooh oo aa aa!');
+  }
+
+  accept(operation: AnimalOperation): void {
+    operation.visitMonkey(this);
+  }
+}
+
+class Lion implements Animal {
+  roar(): void {
+    console.log('Roaaar!');
+  }
+
+  accept(operation: AnimalOperation): void {
+    operation.visitLion(this);
+  }
+}
+
+class Dolphin implements Animal {
+  speak(): void {
+    console.log('Tuut tuttu tuutt!');
+  }
+
+  accept(operation: AnimalOperation): void {
+    operation.visitDolphin(this);
+  }
 }
 ```
-Let's implement our visitor
-```js
-const speak = {
-    visitMonkey(monkey){
-        monkey.shout()
-    },
-    visitLion(lion){
-        lion.roar()
-    },
-    visitDolphin(dolphin){
-        dolphin.speak()
-    }
+
+Реализуем посетителя:
+
+```ts
+class Speak implements AnimalOperation {
+  visitMonkey(monkey: Monkey) {
+    monkey.shout();
+  }
+
+  visitLion(lion: Lion) {
+    lion.roar();
+  }
+
+  visitDolphin(dolphin: Dolphin) {
+    dolphin.speak();
+  }
 }
 ```
 
-And then it can be used as
-```js
-const monkey = new Monkey()
-const lion = new Lion()
-const dolphin = new Dolphin()
+Использование:
 
-monkey.accept(speak)    // Ooh oo aa aa!    
-lion.accept(speak)      // Roaaar!
-dolphin.accept(speak)   // Tuut tutt tuutt!
+```ts
+const monkey = new Monkey();
+const lion = new Lion();
+const dolphin = new Dolphin();
+
+const speak = new Speak();
+
+monkey.accept(speak);    // => Ooh oo aa aa!
+lion.accept(speak);      // => Roaaar!
+dolphin.accept(speak);   // => Tuut tutt tuutt!
 ```
-We could have done this simply by having a inheritance hierarchy for the animals but then we would have to modify the animals whenever we would have to add new actions to animals. But now we will not have to change them. For example, let's say we are asked to add the jump behavior to the animals, we can simply add that by creating a new visitor i.e.
 
-```js
-const jump = {
-    visitMonkey(monkey) {
-        console.log('Jumped 20 feet high! on to the tree!')
-    },
-    visitLion(lion) {
-        console.log('Jumped 7 feet! Back on the ground!')
-    },
-    visitDolphin(dolphin) {
-        console.log('Walked on water a little and disappeared')
-    }
+Это можно было сделать просто с помощью иерархии наследования, но тогда пришлось бы модифицировать животных при каждом 
+добавлении к ним новых действий. А здесь менять их не нужно. Например, мы можем добавить животным прыжки, просто создав 
+нового посетителя:
+
+```ts
+class Jump implements AnimalOperation {
+  visitMonkey(monkey: Monkey) {
+    console.log('Подпрыгнул на 6 метровое дерево!');
+  }
+
+  visitLion(lion: Lion) {
+    console.log('Спрыгнул на землю с 1,5 метров!');
+  }
+
+  visitDolphin(dolphin: Dolphin) {
+    console.log('"Походил" по воде немного и нырнул');
+  }
 }
 ```
-And for the usage
-```js
-monkey.accept(speak)   // Ooh oo aa aa!
-monkey.accept(jump)    // Jumped 20 feet high! on to the tree!
 
-lion.accept(speak)     // Roaaar!
-lion.accept(jump)      // Jumped 7 feet! Back on the ground! 
+Использование:
 
-dolphin.accept(speak)  // Tuut tutt tuutt! 
-dolphin.accept(jump)   // Walked on water a little and disappeared
+```ts
+const jump = new Jump();
+
+monkey.accept(speak);    // => Ooh oo aa aa!
+monkey.accept(jump);    // => Подпрыгнул на 6 метровое дерево!
+lion.accept(speak);      // => Roaaar!
+lion.accept(jump);      // => Спрыгнул на землю с 1,5 метров!
+dolphin.accept(speak);   // => Tuut tutt tuutt!
+dolphin.accept(jump);   // => "Походил" по воде немного и нырнул
 ```
 
-💡 Strategy
+💡 Стратегия (Strategy)
 --------
 
-Real world example
-> Consider the example of sorting, we implemented bubble sort but the data started to grow and bubble sort started getting very slow. In order to tackle this we implemented Quick sort. But now although the quick sort algorithm was doing better for large datasets, it was very slow for smaller datasets. In order to handle this we implemented a strategy where for small datasets, bubble sort will be used and for larger, quick sort.
+Аналогия
+> Возьмём пример с пузырьковой сортировкой. Мы её реализовали, но с ростом объёмов данных сортировка стала выполняться 
+очень медленно. Тогда мы сделали быструю сортировку (Quick sort). Алгоритм работает быстрее на больших объёмах, но на 
+маленьких он очень медленный. Тогда мы реализовали стратегию, при которой для маленьких объёмов данных используется 
+пузырьковая сортировка, а для больших — быстрая.
 
-In plain words
-> Strategy pattern allows you to switch the algorithm or strategy based upon the situation.
+Вкратце
+> Шаблон «Стратегия» позволяет переключаться между алгоритмами или стратегиями в зависимости от ситуации.
 
-Wikipedia says
-> In computer programming, the strategy pattern (also known as the policy pattern) is a behavioural software design pattern that enables an algorithm's behavior to be selected at runtime.
+Википедия
+> Шаблон «Стратегия» позволяет при выполнении выбирать поведение алгоритма.
  
-**Programmatic example**
+**Пример**
 
-Translating our example from above, we can easily implement this strategy in javascript using its feature of first class functions.
+Возьмём вышеописанный пример. Сначала сделаем интерфейс стратегии и реализации самих стратегий.
 
-```js
-const bubbleSort = dataset => {
-    console.log('Sorting with bubble sort')
-    // ...
-    // ...
-    return dataset
+```ts
+interface SortStrategy {
+  sort(dataset: number[]): number[];
 }
 
-const quickSort = dataset => {
-    console.log('Sorting with quick sort')
-    // ...
-    // ...
-    return dataset
+class BubbleSortStrategy implements SortStrategy {
+  sort(dataset: number[]): number[] {
+    console.log('Пузырьковая сортировка');
+
+    // Выполнить сортировку
+    return dataset;
+  }
+}
+
+class QuickSortStrategy implements SortStrategy {
+  sort(dataset: number[]): number[] {
+    console.log('Быстрая сортировка');
+
+    // Выполнить сортировку
+    return dataset;
+  }
 }
 ```
  
-And then we have our client that is going to use any strategy
-```js
-const sorter = dataset => {
-    if(dataset.length > 5){
-        return quickSort
-    } else {
-        return bubbleSort
-    }
+Теперь реализуем клиента, который будет использовать нашу стратегию.
+
+```ts
+class Sorter {
+  sorter: SortStrategy;
+
+  constructor(sorter: SortStrategy) {
+    this.sorter = sorter;
+  }
+
+  sort(dataset: number[]): number[] {
+    return this.sorter.sort(dataset);
+  }
 }
 ```
-And it can be used as
-```js
-const longDataSet = [1, 5, 4, 3, 2, 8]
-const shortDataSet = [1, 5, 4]
 
-const sorter1 = sorter(longDataSet)
-const sorter2 = sorter(shortDataSet)
+Использование:
 
-sorter1(longDataSet) // Output : Sorting with quick sort
-sorter2(shortDataSet) // Output : Sorting with bubble sort
+```ts
+const dataSet = [1, 5, 4, 3, 2, 8];
+
+const sorter1 = new Sorter(new BubbleSortStrategy());
+sorter1.sort(dataSet);    // => Пузырьковая сортировка
+
+const sorter2 = new Sorter(new QuickSortStrategy());
+sorter2.sort(dataSet);    // => Быстрая сортировка
 ```
 
-💢 State
+💢 Состояние (State)
 -----
-Real world example
-> Imagine you are using some drawing application, you choose the paint brush to draw. Now the brush changes it's behavior based on the selected color i.e. if you have chosen red color it will draw in red, if blue then it will be in blue etc.  
+Аналогия
+> Допустим, в графическом редакторе вы выбрали инструмент «Кисть». Она меняет своё поведение в зависимости от настройки 
+цвета: т. е. рисует линию выбранного цвета.  
 
-In plain words
-> It lets you change the behavior of a class when the state changes.
+Вкратце
+> Шаблон позволяет менять поведение класса при изменении состояния.
 
-Wikipedia says
-> The state pattern is a behavioral software design pattern that implements a state machine in an object-oriented way. With the state pattern, a state machine is implemented by implementing each individual state as a derived class of the state pattern interface, and implementing state transitions by invoking methods defined by the pattern's superclass.
-> The state pattern can be interpreted as a strategy pattern which is able to switch the current strategy through invocations of methods defined in the pattern's interface
+Википедия
+> Шаблон «Состояние» реализует машину состояний объектно ориентированным способом. Это достигается с помощью:
+> - реализации каждого состояния в виде производного класса интерфейса шаблона «Состояние»,
+> - реализации переходов состояний (state transitions) посредством вызова методов, определённых вышестоящим классом 
+(superclass).
+   
+> Шаблон «Состояние» — это в некотором плане шаблон «Стратегия», при котором возможно переключение текущей стратегии с 
+помощью вызова методов, определённых в интерфейсе шаблона.
 
-**Programmatic example**
+**Пример**
 
-Let's take an example of text editor, it let's you change the state of text that is typed i.e. if you have selected bold, it starts writing in bold, if italic then in italics etc.
+Текстовый редактор меняет состояние текста, который вы печатаете, т. е. если выбрано полужирное начертание — то редактор 
+печатает полужирным и т. д.
 
-First of all we have our transformation functions
+Сначала сделаем интерфейс состояний и сами состояния:
 
-```js
-const upperCase = inputString => inputString.toUpperCase()
-const lowerCase = inputString => inputString.toLowerCase()
-const defaultTransform = inputString => inputString
-```
-Then we have our editor
-```js
-class TextEditor {
-    constructor(transform) {
-        this._transform = transform
-    }
-    
-    setTransform(transform) {
-        this._transform = transform
-    }
-    
-    type(words) {
-        console.log(this._transform(words))
-    }
+```ts
+interface WritingState {
+  write(words: string);
+}
+
+class UpperCase implements WritingState {
+  write(words: string): void {
+    console.log(words.toUpperCase());
+  }
+}
+
+class LowerCase implements WritingState {
+  write(words: string): void {
+    console.log(words.toLowerCase());
+  }
+}
+
+class Default implements WritingState {
+  write(words: string): void {
+    console.log(words);
+  }
 }
 ```
-And then it can be used as
-```js
-const editor = new TextEditor(defaultTransform)
 
-editor.type('First line')
+Сделаем редактор:
 
-editor.setTransform(upperCase)
+```ts
+class TextEditor {
+  private _state: WritingState;
 
-editor.type('Second line')
-editor.type('Third line')
+  constructor(state: WritingState) {
+    this._state = state;
+  }
 
-editor.setTransform(lowerCase)
+  setState(state: WritingState): void {
+    this._state = state;
+  }
 
-editor.type('Fourth line')
-editor.type('Fifth line')
-
-// Output:
-// First line
-// SECOND LINE
-// THIRD LINE
-// fourth line
-// fifth line
+  type(words: string): void {
+    this._state.write(words);
+  }
+}
 ```
 
-📒 Template Method
+Использование:
+
+```ts
+const editor = new TextEditor(new Default());
+
+editor.type('First line');    // => First line
+
+editor.setState(new UpperCase());
+
+editor.type('Second line');    // => SECOND LINE
+editor.type('Third line');    // => THIRD LINE
+
+editor.setState(new LowerCase());
+
+editor.type('Fourth line');    // => fourth line
+editor.type('Fifth line');    // => fifth line
+```
+
+📒 Шаблонный метод (Template Method)
 ---------------
 
-Real world example
-> Suppose we are getting some house built. The steps for building might look like 
-> - Prepare the base of house
-> - Build the walls
-> - Add roof
-> - Add other floors
-> The order of these steps could never be changed i.e. you can't build the roof before building the walls etc but each of the steps could be modified for example walls can be made of wood or polyester or stone.
+Аналогия
+> Допустим, вы собрались строить дома. Этапы будут такими:
+> - Подготовка фундамента.
+> - Возведение стен.
+> - Настил крыши.
+> - Настил перекрытий.
+
+> Порядок этапов никогда не меняется. Вы не настелите крышу до возведения стен — и т. д. Но каждый этап модифицируется: 
+стены, например, можно возвести из дерева, кирпича или газобетона.
   
-In plain words
-> Template method defines the skeleton of how certain algorithm could be performed but defers the implementation of those steps to the children classes.
+Вкратце
+> «Шаблонный метод» определяет каркас выполнения определённого алгоритма, но реализацию самих этапов делегирует дочерним 
+классам.
  
-Wikipedia says
-> In software engineering, the template method pattern is a behavioral design pattern that defines the program skeleton of an algorithm in an operation, deferring some steps to subclasses. It lets one redefine certain steps of an algorithm without changing the algorithm's structure.
+Википедия
+> «Шаблонный метод» — это поведенческий шаблон, определяющий основу алгоритма и позволяющий наследникам переопределять 
+некоторые шаги алгоритма, не изменяя его структуру в целом.
 
-**Programmatic Example**
+**Пример**
 
-Imagine we have a build tool that helps us test, lint, build, generate build reports (i.e. code coverage reports, linting report etc) and deploy our app on the test server.
+Допустим, у нас есть программный инструмент, позволяющий тестировать, проводить контроль качества кода (lint), выполнять 
+сборку, генерировать отчёты сборки (отчёты о покрытии кода, о качестве кода и т. д.), а также развёртывать приложение на 
+тестовом сервере.
 
-First of all we have our base class that specifies the skeleton for the build algorithm
-```js
-class Builder {
-    // Template method 
-    build() {
-        this.test()
-        this.lint()
-        this.assemble()
-        this.deploy()
-    }
+Сначала наш базовый класс определяет каркас алгоритма сборки.
+
+```ts
+abstract class Builder {
+  abstract test();
+  abstract lint();
+  abstract assemble();
+  abstract deploy();
+
+  // Шаблонный метод
+  build(): void {
+    this.test();
+    this.lint();
+    this.assemble();
+    this.deploy();
+  }
 }
 ```
 
-Then we can have our implementations
+Теперь создаём реализации:
 
-```js
+```ts
 class AndroidBuilder extends Builder {
-    test() {
-        console.log('Running android tests')
-    }
-    
-    lint() {
-        console.log('Linting the android code')
-    }
-    
-    assemble() {
-        console.log('Assembling the android build')
-    }
-    
-    deploy() {
-        console.log('Deploying android build to server')
-    }
+  test(): void {
+    console.log('Выполнение Android-тестов');
+  }
+
+  lint(): void {
+    console.log('Линтинг Android-кода');
+  }
+
+  assemble(): void {
+    console.log('Создание Android-сборки');
+  }
+
+  deploy(): void {
+    console.log('Развёртывание Android-сборки на сервере');
+  }
 }
 
 class IosBuilder extends Builder {
-    test() {
-        console.log('Running ios tests')
-    }
-    
-    lint() {
-        console.log('Linting the ios code')
-    }
-    
-    assemble() {
-        console.log('Assembling the ios build')
-    }
-    
-    deploy() {
-        console.log('Deploying ios build to server')
-    }
+  test(): void {
+    console.log('Выполнение iOS-тестов');
+  }
+
+  lint(): void {
+    console.log('Линтинг iOS-кода');
+  }
+
+  assemble(): void {
+    console.log('Создание iOS-сборки');
+  }
+
+  deploy(): void {
+    console.log('Развёртывание iOS-сборки на сервере');
+  }
 }
 ```
-And then it can be used as
 
-```js
-const androidBuilder = new AndroidBuilder()
-androidBuilder.build()
+Использование:
 
-// Output:
-// Running android tests
-// Linting the android code
-// Assembling the android build
-// Deploying android build to server
+```ts
+const androidBuilder = new AndroidBuilder();
+androidBuilder.build();
 
-const iosBuilder = new IosBuilder()
-iosBuilder.build()
+// => Выполнение Android-тестов
+// => Линтинг Android-кода
+// => Создание Android-сборки
+// => Развёртывание Android-сборки на сервере
 
-// Output:
-// Running ios tests
-// Linting the ios code
-// Assembling the ios build
-// Deploying ios build to server
+const iosBuilder = new IosBuilder();
+iosBuilder.build();
+
+// => Выполнение iOS-тестов
+// => Линтинг iOS-кода
+// => Создание iOS-сборки
+// => Развёртывание iOS-сборки на сервере
 ```
-
-## 🚦 Wrap Up Folks
-
-And that about wraps it up. I will continue to improve this, so you might want to watch/star this repository to revisit. Also, I have plans on writing the same about the architectural patterns, stay tuned for it.
-
-## 👬 Contribution
-
-- Report issues
-- Open pull request with improvements
-- Spread the word
-
-## License
-MIT © [Soham Kamani](http://sohamkamani.com)
-Based on ["Design patterns for humans"](https://github.com/kamranahmedse/design-patterns-for-humans) Copyright 2017 Kamran Ahmed
